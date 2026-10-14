@@ -10,12 +10,12 @@ hero:
   tagline: My great project tagline
   # 首页图片
   image:
-    src: ./public/images/logo.png
+    src: images/logo.png
     alt: VitePress
   actions:
     - theme: brand
-      text: Markdown 例子
-      link: /markdown-examples
+      text: 访问博客
+      link: /blog/
     - theme: alt
       text: API 例子
       link: /api-examples
