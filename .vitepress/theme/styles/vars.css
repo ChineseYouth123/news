@@ -1,0 +1,107 @@
+/* =========================================================
+   设计变量
+   ========================================================= */
+:root {
+  /* 品牌色 */
+  --news-brand:        var(--vp-c-brand-1);
+  --news-brand-hover:  var(--vp-c-brand-2);
+  --news-brand-soft:   var(--vp-c-brand-soft);
+
+  /* 文本 */
+  --news-text:    var(--vp-c-text-1);
+  --news-text-2:  var(--vp-c-text-2);
+  --news-muted:   var(--vp-c-text-3);
+
+  /* 背景 / 分割线 */
+  --news-bg:       var(--vp-c-bg);
+  --news-bg-soft:  var(--vp-c-bg-soft);
+  --news-bg-hover: var(--vp-c-bg-alt);
+  --news-divider:  var(--vp-c-divider);
+
+  /* 尺寸 */
+  --news-radius:      10px;
+  --news-radius-pill: 999px;
+  --news-gap:         8px;
+  --news-gap-lg:      28px;
+  --news-page-x:      0px;
+
+  /* 字号（桌面端） */
+  --news-fs-title:   28px;
+  --news-fs-heading: 16px;
+  --news-fs-body:    14px;
+  --news-fs-small:   12px;
+
+  /* 触控目标 */
+  --news-touch: 40px;
+
+  /* 标签语义色（浅色） */
+  --tag-release-fg: #2f855a;
+  --tag-release-bg: #2f855a11;
+  --tag-release-bd: #2f855a33;
+
+  --tag-eco-fg: #3182ce;
+  --tag-eco-bg: #3182ce11;
+  --tag-eco-bd: #3182ce33;
+
+  --tag-deep-fg: #805ad5;
+  --tag-deep-bg: #805ad511;
+  --tag-deep-bd: #805ad533;
+
+  --tag-sec-fg: #c53030;
+  --tag-sec-bg: #c5303011;
+  --tag-sec-bd: #c5303033;
+}
+
+/* 暗色标签色 */
+.dark {
+  --tag-release-fg: #68d391;
+  --tag-release-bg: #68d3911a;
+  --tag-release-bd: #68d39133;
+
+  --tag-eco-fg: #63b3ed;
+  --tag-eco-bg: #63b3ed1a;
+  --tag-eco-bd: #63b3ed33;
+
+  --tag-deep-fg: #b794f4;
+  --tag-deep-bg: #b794f41a;
+  --tag-deep-bd: #b794f433;
+
+  --tag-sec-fg: #fc8181;
+  --tag-sec-bg: #fc81811a;
+  --tag-sec-bd: #fc818133;
+}
+
+/* 响应式变量 */
+@media (max-width: 1024px) {
+  :root {
+    --news-fs-title: 26px;
+    --news-gap-lg:   24px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --news-fs-title:   24px;
+    --news-fs-heading: 15px;
+    --news-fs-body:    13.5px;
+    --news-gap-lg:     22px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --news-fs-title:   22px;
+    --news-fs-heading: 14px;
+    --news-fs-body:    13px;
+    --news-fs-small:   11px;
+    --news-gap:        6px;
+    --news-gap-lg:     20px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --news-fs-title: 20px;
+    --news-gap-lg:   18px;
+  }
+}

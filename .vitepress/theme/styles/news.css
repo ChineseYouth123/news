@@ -1,0 +1,352 @@
+/* =========================================================
+   新闻页专属样式（纯 CSS，无 SCSS）
+   ========================================================= */
+
+.news-page {
+  max-width: 100%;
+}
+
+/* ---------- 头部 ---------- */
+.news-header h1 {
+  font-size: var(--news-fs-title);
+  margin: 0 0 4px;
+  color: var(--news-text);
+  line-height: 1.25;
+}
+.news-header .subtitle {
+  color: var(--news-muted);
+  margin: 0 0 8px;
+  font-size: var(--news-fs-body);
+  line-height: 1.5;
+}
+.news-header .count {
+  color: var(--news-muted);
+  font-size: var(--news-fs-body);
+}
+.news-header .count .num {
+  color: var(--news-brand);
+  font-weight: 600;
+}
+.news-list a{
+  border: 1px solid var(--vp-c-border);
+}
+
+.vp-doc ul, .vp-doc ol {
+  padding-left: 0!important;
+  margin: 16px 0;
+}
+
+@media (max-width: 480px) {
+  .news-header .subtitle {
+    font-size: 12.5px;
+  }
+}
+
+/* ---------- 筛选栏 ---------- */
+.news-tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--news-gap);
+  margin: 20px 0 8px;
+}
+
+/* ---------- 月份分组 ---------- */
+.news-month-group {
+  margin-top: var(--news-gap-lg);
+}
+.news-month-label {
+  font-size: var(--news-fs-heading);
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--news-divider);
+  color: var(--news-text);
+}
+
+/* ---------- 列表容器：左侧零缩进 ---------- */
+.news-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: news-item;
+}
+
+/* 干掉 VitePress 原生 marker */
+.news-list li,
+.news-list li::marker {
+  list-style: none;
+  content: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ---------- 列表项：左侧贴齐 ---------- */
+.news-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px 8px 0;
+  color: var(--news-text);
+  border-radius: var(--news-radius);
+  border: 1px solid var(--vp-c-border);
+  transition: background 0.15s, color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  text-decoration: none !important;
+  min-width: 0;
+}
+.news-link:link,
+.news-link:visited,
+.news-link:hover,
+.news-link:active,
+.news-link:focus {
+  text-decoration: none !important;
+}
+.news-link:hover {
+  background: var(--news-bg-hover);
+  border: 1px solid var(--news-brand);
+  color: var(--news-brand);
+}
+
+/* ---------- 有序编号胶囊 ---------- */
+.news-link::before {
+  counter-increment: news-item;
+  content: counter(news-item, decimal-leading-zero);
+  flex-shrink: 0;
+  width: 24px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--news-brand);
+  background: var(--news-brand-soft);
+  border-radius: 5px;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+.news-link:hover::before {
+  color: #fff;
+  background: var(--news-brand);
+}
+
+/* ---------- 标题：单行溢出省略 ---------- */
+.news-title {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.5;
+
+ overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+word-break: break-word;
+overflow-wrap: anywhere;
+width: 270px;
+display: block;
+}
+
+/* ---------- 置顶徽章（美化版） ---------- */
+.news-top-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  padding: 4px 7px;
+
+  color: #fff;
+  background: linear-gradient(135deg, var(--news-brand), var(--news-brand-hover));
+  border-radius: 5px;
+
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.news-top-badge-div{
+  display: flex;
+  /* justify-content: space-between; */
+  /* width: 100%; */
+}
+
+/* 上升箭头（纯 CSS） */
+.news-top-badge::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-bottom: 4px solid currentColor;
+  flex-shrink: 0;
+}
+
+.news-link:hover .news-top-badge {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* ---------- 标签容器 ---------- */
+.news-tags {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ---------- 空状态 ---------- */
+.news-empty {
+  color: var(--news-muted);
+  text-align: center;
+  padding: 40px 0;
+  font-size: var(--news-fs-body);
+}
+
+/* ---------- 分页页脚 ---------- */
+.news-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 36px;
+  padding-top: 20px;
+  border-top: 1px solid var(--news-divider);
+}
+.news-page-info {
+  margin-left: 10px;
+  font-size: 13px;
+  color: var(--news-muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .news-pagination {
+    margin-top: 28px;
+    padding-top: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .news-pagination {
+    margin-top: 24px;
+    padding-top: 14px;
+    gap: 5px;
+  }
+  .news-page-info {
+    font-size: 12px;
+    margin-left: 6px;
+  }
+}
+
+/* =========================================================
+   移动端：编号 / 标题 / 标签 左侧垂直对齐
+   ========================================================= */
+@media (max-width: 640px) {
+  .news-link {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 6px;
+    row-gap: 4px;
+    padding: 10px 0;
+    align-items: start;
+  }
+
+  .news-link::before {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    margin-top: 2px;
+    margin-right: 0;
+    width: 24px;
+  }
+
+  .news-title {
+    grid-column: 2;
+    grid-row: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .news-tags {
+    grid-column: 2;
+    grid-row: 2;
+    margin-right: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding-left: 0;
+  }
+
+  .news-top-badge {
+    font-size: 10px;
+    padding: 3px 5px;
+    margin-right: 5px;
+    gap: 2px;
+    width: 40px;
+    height: 20px;
+  }
+  .news-top-badge::before {
+    border-left-width: 2.5px;
+    border-right-width: 2.5px;
+    border-bottom-width: 3.5px;
+  }
+}
+
+@media (max-width: 400px) {
+  .news-tags { gap: 3px; }
+  .news-tag {
+    padding: 0 5px;
+    line-height: 17px;
+  }
+}
+
+/* =========================================================
+   VitePress 内容区宽度适配（需 pageClass: page-news）
+   ========================================================= */
+.page-news .VPDoc .content-container {
+  max-width: 100% !important;
+}
+
+@media (min-width: 960px) {
+  .page-news .VPDoc .content-container {
+    max-width: 880px !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .page-news .VPDoc .content-container {
+    max-width: 1080px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-news .VPDoc {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* =========================================================
+   全局：正文区链接无下划线
+   ========================================================= */
+.vp-doc a,
+.vp-doc a:hover,
+.vp-doc a:visited {
+  text-decoration: none;
+}

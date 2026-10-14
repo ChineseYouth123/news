@@ -1,0 +1,155 @@
+/* =========================================================
+   通用基础 / 工具类
+   ========================================================= */
+
+/* ---------- 胶囊标签 ---------- */
+.news-tag {
+  font-size: var(--news-fs-small);
+  padding: 0 8px;
+  line-height: 20px;
+  border-radius: var(--news-radius-pill);
+  border: 1px solid var(--news-divider);
+  color: var(--news-muted);
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.news-tag[data-tag="发布"] {
+  color: var(--tag-release-fg);
+  background: var(--tag-release-bg);
+  border-color: var(--tag-release-bd);
+}
+.news-tag[data-tag="生态"] {
+  color: var(--tag-eco-fg);
+  background: var(--tag-eco-bg);
+  border-color: var(--tag-eco-bd);
+}
+.news-tag[data-tag="深度"] {
+  color: var(--tag-deep-fg);
+  background: var(--tag-deep-bg);
+  border-color: var(--tag-deep-bd);
+}
+.news-tag[data-tag="安全"] {
+  color: var(--tag-sec-fg);
+  background: var(--tag-sec-bg);
+  border-color: var(--tag-sec-bd);
+}
+
+@media (max-width: 640px) {
+  .news-tag {
+    padding: 0 6px;
+    line-height: 18px;
+  }
+}
+
+/* ---------- 筛选按钮 ---------- */
+.news-filter-btn {
+  font-size: var(--news-fs-small);
+  padding: 4px 12px;
+  min-height: 30px;
+  border-radius: var(--news-radius-pill);
+  border: 1px solid var(--news-divider);
+  background: transparent;
+  color: var(--news-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.news-filter-btn:hover {
+  border-color: var(--news-brand);
+  color: var(--news-brand);
+}
+.news-filter-btn.active {
+  background: var(--news-brand);
+  color: #fff;
+  border-color: var(--news-brand);
+}
+
+@media (max-width: 640px) {
+  .news-tag-filter {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-left: calc(-1 * var(--news-page-x));
+    margin-right: calc(-1 * var(--news-page-x));
+    padding-left: var(--news-page-x);
+    padding-right: var(--news-page-x);
+  }
+  .news-tag-filter::-webkit-scrollbar {
+    display: none;
+  }
+  .news-filter-btn {
+    flex-shrink: 0;
+    min-height: 32px;
+    padding: 5px 14px;
+  }
+}
+
+/* ---------- 分页按钮 ---------- */
+.news-page-btn {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  font-size: 13px;
+  border-radius: 8px;
+  border: 1px solid var(--news-divider);
+  background: transparent;
+  color: var(--news-text);
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.news-page-btn:hover:not(:disabled):not(.active):not(.dots) {
+  border-color: var(--news-brand);
+  color: var(--news-brand);
+}
+.news-page-btn.active {
+  background: var(--news-brand);
+  color: #fff;
+  border-color: var(--news-brand);
+}
+.news-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.news-page-btn.dots {
+  border-color: transparent;
+  cursor: default;
+  pointer-events: none;
+  min-width: 20px;
+}
+
+@media (max-width: 768px) {
+  .news-page-btn {
+    min-width: 32px;
+    height: 32px;
+    font-size: 12.5px;
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .news-page-btn {
+    min-width: 30px;
+    height: 30px;
+    font-size: 12px;
+    padding: 0 6px;
+    border-radius: 6px;
+  }
+  .news-page-btn.dots {
+    min-width: 14px;
+  }
+}
+
+@media (max-width: 400px) {
+  .news-pagination {
+    gap: 4px;
+  }
+  .news-page-info {
+    flex-basis: 100%;
+    text-align: center;
+    margin: 4px 0 0;
+  }
+}
