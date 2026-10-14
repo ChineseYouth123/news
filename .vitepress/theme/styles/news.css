@@ -84,7 +84,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 8px 8px 0;
+  padding: 15px 8px 15px 8px;
   color: var(--news-text);
   border-radius: var(--news-radius);
   border: 1px solid var(--vp-c-border);
@@ -201,6 +201,7 @@ display: block;
   display: flex;
   gap: 6px;
   flex-shrink: 0;
+  margin-right: 5px!important;
 }
 
 /* ---------- 空状态 ---------- */
@@ -286,11 +287,11 @@ display: block;
   .news-tags {
     grid-column: 2;
     grid-row: 2;
-    margin-right: 5px;
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
     padding-left: 0;
+    margin-right: 5px!important;
   }
 
   .news-top-badge {
