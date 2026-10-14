@@ -1,0 +1,18 @@
+{
+  "recommendations": [
+    // Vue 官方支持
+    "vue.volar",
+
+    // 规范提交信息
+    "vivaxy.vscode-conventional-commits",
+
+    // 编辑器配置支持
+    "editorconfig.editorconfig",
+
+    // 路径智能提示
+    "christian-kohler.path-intellisense",
+
+    // 代码格式化
+    "esbenp.prettier-vscode"
+  ]
+}
