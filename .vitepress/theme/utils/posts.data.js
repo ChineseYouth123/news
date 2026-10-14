@@ -1,4 +1,4 @@
-import { createContentLoader } from "vitepress";
+import { createContentLoader } from 'vitepress';
 
 // ============ 安全解析日期 ============
 function toDate(v) {
@@ -8,7 +8,7 @@ function toDate(v) {
 }
 
 // ============ 创建 Data Loader ============
-export default createContentLoader("blog/posts/**/*.md", {
+export default createContentLoader('blog/posts/**/*.md', {
   excerpt: false,
 
   transform(raw) {
@@ -23,14 +23,14 @@ export default createContentLoader("blog/posts/**/*.md", {
         const d = toDate(fm.date);
         return {
           url: p.url,
-          title: String(fm.title ?? "未命名文章"),
+          title: String(fm.title ?? '未命名文章'),
           date: d.getTime(),
           dateStr: d.toISOString().slice(0, 10),
           tags: Array.isArray(fm.tags) ? fm.tags : [],
           categories: Array.isArray(fm.categories) ? fm.categories : [],
-          description: String(fm.description ?? ""),
+          description: String(fm.description ?? ''),
           top: Boolean(fm.top),
-          cover: String(fm.cover ?? ""),
+          cover: String(fm.cover ?? ''),
         };
       })
       // ---------- 2. 排序：置顶优先，其次日期倒序 ----------
@@ -44,7 +44,7 @@ export default createContentLoader("blog/posts/**/*.md", {
     for (const p of posts) {
       const d = new Date(p.date);
       const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const m = String(d.getMonth() + 1).padStart(2, '0');
       const key = `${y}-${m}`;
       if (!map.has(key)) {
         map.set(key, {

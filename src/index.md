@@ -5,8 +5,8 @@ layout: home
 
 # Hero 部分位于主页顶部。
 hero:
-  name: "笔记"
-  text: "敢于创新和发扬传承的网站。"
+  name: '笔记'
+  text: '敢于创新和发扬传承的网站。'
   tagline: My great project tagline
   # 首页图片
   image:
@@ -22,7 +22,7 @@ hero:
     - theme: github
       text: View on GitHub
       link: https://github.com/vuejs/vitepress
-# 
+#
 features:
   - icon: 📅
     title: 每日自动排序
@@ -34,4 +34,3 @@ features:
     title: 极简创作模式
     details: 仅需编写带date字段的Markdown文档，新增内容自动加入列表
 ---
-
