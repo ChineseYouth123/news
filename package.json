@@ -4,8 +4,9 @@
     "build": "vitepress build",
     "preview": "vitepress preview"
   },
-  "type":"module",
+  "type": "module",
   "devDependencies": {
+    "eslint-config-prettier": "^10.1.8",
     "fast-glob": "^3.3.3",
     "vitepress": "^1.6.4"
   },

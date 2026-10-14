@@ -1,0 +1,37 @@
+{
+  // 1. 开启保存时格式化
+  "editor.formatOnSave": true,
+
+  // 2. 指定默认格式化器为 Prettier (全局)
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // 3. 针对特定文件类型强制使用 Prettier (防止其他插件抢戏)
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // 4. 禁用可能导致冲突的其他格式化行为
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit" // 如果用了 ESLint，让它修复错误，但不要让它格式化代码
+  },
+
+  // 5. 确保 EditorConfig 插件已安装并启用
+  "editorconfig.trimTrailingWhitespace": true,
+  "editorconfig.insertFinalNewline": true,
+  "files.autoSave": "onFocusChange"
+}
