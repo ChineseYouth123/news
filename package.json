@@ -4,8 +4,15 @@
     "build": "vitepress build",
     "preview": "vitepress preview"
   },
+  "type":"module",
   "devDependencies": {
     "fast-glob": "^3.3.3",
     "vitepress": "^1.6.4"
+  },
+  "dependencies": {
+    "fs-extra": "^11.4.1",
+    "globby": "^16.2.4",
+    "gray-matter": "^4.0.3",
+    "sass-embedded": "^1.105.1"
   }
 }
