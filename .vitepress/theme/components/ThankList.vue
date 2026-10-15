@@ -19,9 +19,14 @@ const groups = [
         name: 'deepseek',
         desc: '功能页与疑难项',
         avatar: '/thanks/deepseek.png',
-        link: 'https://github.com/',
+        link: 'https://github.com/deepseek-ai',
       },
-      { name: 'QWen', desc: '底座搭建', avatar: '/thanks/QWen.png', link: 'https://github.com/' },
+      {
+        name: 'QWen',
+        desc: '底座搭建',
+        avatar: '/thanks/QWen.png',
+        link: 'https://github.com/QwenLM/Qwen',
+      },
     ],
   },
   // {
@@ -38,10 +43,10 @@ const groups = [
     desc: '感谢给予帮助的朋友们~',
     members: [
       {
-        name: '开源社区',
+        name: '开源主题',
         desc: '网站v1.0版本使用过开源库',
         avatar: '/thanks/42232682.jpeg',
-        url: 'https://github.com/imsyy/vitepress-theme-curve/',
+        link: 'https://github.com/imsyy/vitepress-theme-curve/',
       },
     ],
   },
