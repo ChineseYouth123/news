@@ -67,7 +67,13 @@ export default defineConfig({
     search: {
       provider: 'local', // 本地搜索
     },
-
+    returnToTopLabel: '回到顶部',
+    sidebarMenuLabel: '菜单',
+    darkModeSwitchLabel: '主题',
+    lightModeSwitchTitle: '切换到浅色模式',
+    darkModeSwitchTitle: '切换到深色模式',
+    langMenuLabel: '切换语言',
+    externalLinkIcon: true,
     socialLinks: [{ icon: 'github', link: 'https://github.com/vuejs/vitepress' }],
     footer: {
       copyright: `本中文文档采用 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 (CC BY-NC-SA 4.0) 进行许可。`,
