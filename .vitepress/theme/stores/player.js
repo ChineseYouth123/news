@@ -75,6 +75,16 @@ export const usePlayerStore = defineStore('player', () => {
     console.log('[player] prev → index =', currentIndex.value);
   }
 
+  function setTrackDuration(index, duration) {
+    if (index < 0 || index >= queue.value.length) return;
+    const t = queue.value[index];
+    if (t && Number.isFinite(duration) && duration > 0) {
+      t.duration = duration;
+      // 强制触发响应式更新（如果 Vue 没追踪到深层属性）
+      queue.value = [...queue.value];
+    }
+  }
+
   return {
     queue,
     currentIndex,
@@ -85,6 +95,7 @@ export const usePlayerStore = defineStore('player', () => {
     playMode,
     playlistInfo,
     currentTrack,
+    setTrackDuration,
     loadPlaylist,
     playTrackAt,
     togglePlay,

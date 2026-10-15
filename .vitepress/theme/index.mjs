@@ -4,10 +4,8 @@ import { h } from 'vue';
 import { createPinia } from 'pinia';
 
 import NewsList from './components/NewsList.vue';
-import BackToList from './components/BackToList.vue';
 import ThankList from './components/ThankList.vue';
 import MaterialList from './components/MaterialList.vue';
-import NotFound from './components/NotFound.vue';
 import MyLayout from './components/Layout.vue';
 
 import './styles/vars.css';

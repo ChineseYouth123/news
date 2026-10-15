@@ -7,11 +7,23 @@
   "tracks": [
     {
       "id": "t1",
-      "title": "r1",
-      "artist": "Artist A",
-      "album": "Album X",
-      "duration": 180,
-      "url": "/music/r1.mp3"
+      "title": "东方红-卫星",
+      "artist": "卫星",
+      "album": "",
+      "duration": 0,
+      "url": "/music/东方红-卫星/东方红-卫星.mp3",
+      "cover": "/music/东方红-卫星/wx.jpg",
+      "lrcUrl": ""
+    },
+    {
+      "id": "t2",
+      "title": "东方红-群星",
+      "artist": "群星",
+      "album": "",
+      "duration": 0,
+      "url": "/music/东方红-群星/东方红-群星.mp3",
+      "cover": "/music/东方红-群星/wx.jpg",
+      "lrcUrl": "/music/东方红-群星/东方红-群星.lrc"
     }
   ]
 }

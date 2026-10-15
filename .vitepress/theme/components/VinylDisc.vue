@@ -19,39 +19,71 @@ defineProps({
   position: relative;
   border-radius: 50%;
   overflow: hidden;
-  background: #333;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  background: repeating-radial-gradient(
+    circle at center,
+    #1a1a1a 0px,
+    #1a1a1a 1px,
+    #222 2px,
+    #222 3px
+  );
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.25);
   animation: vp-disc-spin 20s linear infinite;
   animation-play-state: paused;
+  transition: box-shadow 0.3s ease;
 }
+
 .vp-disc.spinning {
   animation-play-state: running;
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.25),
+    0 0 0 4px rgba(62, 175, 124, 0.25);
 }
+
 .vp-disc__cover {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 62%;
+  height: 62%;
+  border-radius: 50%;
   object-fit: cover;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
+
 .vp-disc__placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 62%;
+  height: 62%;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
   color: #fff;
-  font-size: 24px;
+  font-size: 20px;
+  background: #333;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
+
 .vp-disc__center {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 16%;
-  height: 16%;
+  width: 8%;
+  height: 8%;
   background: #111;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+  z-index: 2;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
 }
+
 @keyframes vp-disc-spin {
   to {
     transform: rotate(360deg);

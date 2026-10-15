@@ -26,7 +26,13 @@ export function initAudioEngine() {
 
   audio.addEventListener('loadedmetadata', () => {
     console.log('[audio] 事件 loadedmetadata, duration =', audio.duration);
-    store.duration = audio.duration || store.duration;
+    const realDuration = audio.duration || 0;
+    store.duration = realDuration;
+
+    // ★ 把实际时长写回当前播放的 track
+    if (Number.isFinite(realDuration) && realDuration > 0) {
+      store.setTrackDuration(store.currentIndex, realDuration);
+    }
   });
 
   audio.addEventListener('canplay', () => {
@@ -90,6 +96,7 @@ export function initAudioEngine() {
           audio.src = url;
           audio.load();
           store.currentTime = 0;
+          store.duration = 0;
           store.duration = track.duration || 0;
 
           console.log('[audio] 检查 isPlaying =', store.isPlaying);
