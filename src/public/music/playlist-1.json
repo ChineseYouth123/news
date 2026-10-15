@@ -1,0 +1,17 @@
+{
+  "id": "1",
+  "name": "红歌",
+  "creator": "",
+  "description": "播放本地音频",
+  "cover": "/music/guoqi.jpg",
+  "tracks": [
+    {
+      "id": "t1",
+      "title": "r1",
+      "artist": "Artist A",
+      "album": "Album X",
+      "duration": 180,
+      "url": "/music/r1.mp3"
+    }
+  ]
+}

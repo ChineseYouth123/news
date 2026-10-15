@@ -20,6 +20,7 @@
     "fs-extra": "^11.4.1",
     "globby": "^16.2.4",
     "gray-matter": "^4.0.3",
+    "pinia": "^4.1.0",
     "sass-embedded": "^1.105.1"
   }
 }

@@ -62,7 +62,7 @@ export default defineConfig({
       label: '目录', // 设置为中文标题
     },
     // 侧边栏-菜单-子页面
-    sidebar: [],
+    sidebar: [{ text: '音乐', items: [{ text: '播放列表', link: '/playlist' }] }],
     // 搜索
     search: {
       provider: 'local', // 本地搜索
@@ -80,7 +80,11 @@ export default defineConfig({
         // 或者其他你需要的别名
       },
     },
-    plugins: [materialsPlugin(MATERIALS_DIR, '/resources')],
+    optimizeDeps: {
+      include: ['clipboard'],
+      exclude: ['vitepress-plugin-awesome-musicplayer'],
+    },
+    plugins: [materialsPlugin(MATERIALS_DIR, '/materials')],
   },
   transformHead({ assets }) {
     // 相应地调整正则表达式以匹配字体

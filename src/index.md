@@ -16,9 +16,9 @@ hero:
     - theme: brand
       text: 访问博客
       link: /blog/
-    - theme: alt
-      text: API 例子
-      link: /api-examples
+    - theme: brand
+      text: 查看播放列表
+      link: /playlist
     - theme: github
       text: View on GitHub
       link: https://github.com/vuejs/vitepress
