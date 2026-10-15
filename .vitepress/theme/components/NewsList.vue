@@ -91,7 +91,6 @@ function goToPage(p) {
 }
 
 function goHref(url) {
-  console.log('url-------->', url);
   // :href="item.url"
   router.go(url)
 }
@@ -112,7 +111,7 @@ watch(totalPages, (tp) => {
 <template>
   <div class="news-page">
     <header class="news-header">
-      <h1>新闻动态</h1>
+      <h1>博客动态</h1>
       <!-- <p class="subtitle">追踪 Vue 生态与 Vite 的最新发布、更新和活动</p> -->
       <p class="count">
         全部文章（<span class="num">{{ activeTag ? filteredTotal : total }}</span> 篇）

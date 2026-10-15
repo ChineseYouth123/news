@@ -1,5 +1,5 @@
 /* =========================================================
-   新闻页专属样式（纯 CSS，无 SCSS）
+   博客页专属样式（纯 CSS，无 SCSS）
    ========================================================= */
 
 .news-page {
@@ -27,12 +27,13 @@
   color: var(--news-brand);
   font-weight: 600;
 }
-.news-list a{
+.news-list a {
   border: 1px solid var(--vp-c-border);
 }
 
-.vp-doc ul, .vp-doc ol {
-  padding-left: 0!important;
+.vp-doc ul,
+.vp-doc ol {
+  padding-left: 0 !important;
   margin: 16px 0;
 }
 
@@ -84,11 +85,14 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 15px 8px 15px 8px;
+  padding: 8px 8px;
+  height: 60px;
   color: var(--news-text);
   border-radius: var(--news-radius);
   border: 1px solid var(--vp-c-border);
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
   -webkit-tap-highlight-color: transparent;
   outline: none;
   text-decoration: none !important;
@@ -125,7 +129,9 @@
   background: var(--news-brand-soft);
   border-radius: 5px;
   line-height: 1;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
   margin-left: 2px;
   margin-right: 2px;
 }
@@ -140,13 +146,13 @@
   min-width: 0;
   line-height: 1.5;
 
- overflow: hidden;
-text-overflow: ellipsis;
-white-space: nowrap;
-word-break: break-word;
-overflow-wrap: anywhere;
-width: 270px;
-display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  width: 270px;
+  display: block;
 }
 
 /* ---------- 置顶徽章（美化版） ---------- */
@@ -171,10 +177,12 @@ display: block;
   border-radius: 5px;
 
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
 }
 
-.news-top-badge-div{
+.news-top-badge-div {
   display: flex;
   /* justify-content: space-between; */
   /* width: 100%; */
@@ -182,7 +190,7 @@ display: block;
 
 /* 上升箭头（纯 CSS） */
 .news-top-badge::before {
-  content: "";
+  content: '';
   width: 0;
   height: 0;
   border-left: 3px solid transparent;
@@ -201,7 +209,7 @@ display: block;
   display: flex;
   gap: 6px;
   flex-shrink: 0;
-  margin-right: 5px!important;
+  margin-right: 5px !important;
 }
 
 /* ---------- 空状态 ---------- */
@@ -291,7 +299,7 @@ display: block;
     flex-wrap: wrap;
     gap: 4px;
     padding-left: 0;
-    margin-right: 5px!important;
+    margin-right: 5px !important;
   }
 
   .news-top-badge {
@@ -310,7 +318,9 @@ display: block;
 }
 
 @media (max-width: 400px) {
-  .news-tags { gap: 3px; }
+  .news-tags {
+    gap: 3px;
+  }
   .news-tag {
     padding: 0 5px;
     line-height: 17px;

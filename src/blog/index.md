@@ -1,5 +1,5 @@
 ---
-title: 新闻动态
+title: 博客动态
 ---
 
 <!-- src/blog/index.md -->

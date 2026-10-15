@@ -1,6 +1,12 @@
 import { defineConfig } from 'vitepress';
 import path from 'path';
 
+import pathNode from 'node:path';
+import { fileURLToPath } from 'node:url';
+import materialsPlugin from './theme/plugins/materials';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const MATERIALS_DIR = path.resolve(__dirname, '@/materials');
 // -------------------------------------- VitePress 配置 ----------------------------
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -38,6 +44,7 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: '博客', link: '/blog/' },
+      { text: '资料', link: '/materials/' },
       {
         text: 'About',
         activeMatch: `^/about/`,
@@ -51,9 +58,8 @@ export default defineConfig({
     outline: {
       // 显示层级：数字(如 2 只显示 h2)、数组(如 [2, 4] 显示 h2 到 h4)、'deep'(等于 [2, 6])
       level: 'deep', // 推荐 'deep'，显示所有 h2 到 h6 标题
-
       // 自定义目录标题（默认是英文的 "On this page"）
-      label: '页面导航', // 设置为中文标题
+      label: '目录', // 设置为中文标题
     },
     // 侧边栏-菜单-子页面
     sidebar: [],
@@ -74,6 +80,7 @@ export default defineConfig({
         // 或者其他你需要的别名
       },
     },
+    plugins: [materialsPlugin(MATERIALS_DIR, '/resources')],
   },
   transformHead({ assets }) {
     // 相应地调整正则表达式以匹配字体
