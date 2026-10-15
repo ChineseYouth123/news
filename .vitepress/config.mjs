@@ -46,11 +46,11 @@ export default defineConfig({
       { text: '博客', link: '/blog/' },
       { text: '资料', link: '/materials/' },
       {
-        text: 'About',
+        text: '关于',
         activeMatch: `^/about/`,
         items: [
-          { text: 'FAQ', link: '/about/faq' },
-          { text: 'Team', link: '/about/team' },
+          { text: '反馈与建议', link: '/about/faq' },
+          { text: '感谢', link: '/thanks/' },
           { text: 'Releases', link: '/about/releases' },
         ],
       },

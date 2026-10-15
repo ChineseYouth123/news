@@ -1,0 +1,284 @@
+/* =========================================================
+   致谢页
+   ========================================================= */
+
+.thanks-page {
+  max-width: 100%;
+}
+
+.vp-doc h2 {
+  padding-top: 0 !important;
+}
+
+/* ---------- 页头 ---------- */
+.thanks-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.thanks-header h1 {
+  font-size: var(--news-fs-title);
+  margin: 0 0 6px;
+  color: var(--news-text);
+  line-height: 1.25;
+}
+.thanks-header .subtitle {
+  color: var(--news-muted);
+  font-size: var(--news-fs-body);
+  margin: 0;
+}
+
+/* ---------- 分组 ---------- */
+.thanks-group {
+  margin-top: 40px;
+}
+.thanks-group__head {
+  /* margin-bottom: 16px; */
+  /* padding-bottom: 8px; */
+  border-bottom: 1px solid var(--news-divider);
+}
+.thanks-group__title {
+  font-size: var(--news-fs-heading);
+  margin: 0 0 4px;
+  color: var(--news-text);
+  position: relative;
+  padding-left: 12px;
+}
+.thanks-group__title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 16px;
+  background: var(--news-brand);
+  border-radius: 2px;
+}
+.thanks-group__desc {
+  font-size: 13px;
+  color: var(--news-muted);
+  margin: 0;
+  padding-left: 12px;
+}
+
+/* ---------- 网格 ---------- */
+.thanks-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+.thanks-grid li::marker {
+  content: none;
+}
+
+/* ---------- 卡片 ---------- */
+.thanks-card__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  padding: 20px 14px 18px;
+  border: 1px solid var(--news-divider);
+  border-radius: var(--news-radius);
+  background: var(--news-bg-soft);
+
+  color: var(--news-text);
+  text-decoration: none !important;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+  min-height: 180px;
+  height: 100%;
+}
+.thanks-card__inner:hover {
+  border-color: var(--news-brand);
+  background: var(--news-bg-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -10px rgba(200, 16, 46, 0.25);
+  color: var(--news-text);
+}
+.thanks-card__inner:link,
+.thanks-card__inner:visited,
+.thanks-card__inner:active,
+.thanks-card__inner:focus {
+  text-decoration: none !important;
+}
+
+/* ---------- 圆形头像 ---------- */
+.thanks-avatar {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--news-brand-soft);
+  border: 2px solid var(--news-brand-soft);
+  transition:
+    border-color 0.2s,
+    transform 0.2s;
+  margin-bottom: 12px;
+}
+.thanks-card__inner:hover .thanks-avatar {
+  border-color: var(--news-brand);
+  transform: scale(1.05);
+}
+
+.thanks-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  z-index: 1;
+  border-radius: 50%;
+}
+
+/* 首字母兜底（在 img 下层，img 加载失败时露出） */
+.thanks-avatar__initial {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--news-brand);
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+/* ---------- 卡片文字 ---------- */
+.thanks-name {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 6px;
+  color: var(--news-text);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.thanks-desc {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--news-muted);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------- 页脚 ---------- */
+.thanks-footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--news-divider);
+  text-align: center;
+  font-size: 13px;
+  color: var(--news-muted);
+}
+.thanks-footer a {
+  color: var(--news-brand);
+  text-decoration: none;
+}
+.thanks-footer a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   响应式
+   ========================================================= */
+@media (max-width: 1024px) {
+  .thanks-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .thanks-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .thanks-card__inner {
+    padding: 16px 10px 14px;
+    min-height: 160px;
+  }
+  .thanks-avatar {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+  }
+  .thanks-avatar__initial {
+    font-size: 22px;
+  }
+  .thanks-name {
+    font-size: 13px;
+  }
+  .thanks-desc {
+    font-size: 11.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .thanks-header {
+    margin-bottom: 28px;
+  }
+  .thanks-group {
+    margin-top: 32px;
+  }
+  .thanks-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 手机固定两列 */
+    gap: 10px;
+  }
+  .thanks-card__inner {
+    padding: 14px 8px 12px;
+    min-height: 150px;
+  }
+  .thanks-avatar {
+    width: 54px;
+    height: 54px;
+    margin-bottom: 8px;
+  }
+  .thanks-avatar__initial {
+    font-size: 20px;
+  }
+  .thanks-name {
+    font-size: 12.5px;
+    margin-bottom: 4px;
+  }
+  .thanks-desc {
+    font-size: 11px;
+    -webkit-line-clamp: 2;
+  }
+}
+
+@media (max-width: 360px) {
+  .thanks-grid {
+    grid-template-columns: 1fr; /* 极小屏单列 */
+  }
+}
+
+/* =========================================================
+   暗色模式微调
+   ========================================================= */
+.dark .thanks-card__inner {
+  background: var(--vp-c-bg-soft);
+}
+.dark .thanks-card__inner:hover {
+  box-shadow: 0 8px 20px -10px rgba(230, 57, 70, 0.3);
+}
