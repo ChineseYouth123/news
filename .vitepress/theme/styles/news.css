@@ -184,8 +184,6 @@
 
 .news-top-badge-div {
   display: flex;
-  /* justify-content: space-between; */
-  /* width: 100%; */
 }
 
 /* 上升箭头（纯 CSS） */
@@ -316,7 +314,7 @@
     border-bottom-width: 3.5px;
   }
 }
-
+/* 移动端分辨率 */
 @media (max-width: 400px) {
   .news-tags {
     gap: 3px;
@@ -324,6 +322,9 @@
   .news-tag {
     padding: 0 5px;
     line-height: 17px;
+  }
+  .news-top-badge-div {
+    margin-top: 20px;
   }
 }
 
@@ -350,6 +351,9 @@
   .page-news .VPDoc {
     padding-left: 16px;
     padding-right: 16px;
+  }
+  .news-top-badge-div {
+    margin-top: 20px;
   }
 }
 

@@ -1,107 +1,150 @@
 /* =========================================================
-   设计变量
+   设计变量 · 中国红主题
    ========================================================= */
 :root {
-  /* 品牌色 */
-  --news-brand:        var(--vp-c-brand-1);
-  --news-brand-hover:  var(--vp-c-brand-2);
-  --news-brand-soft:   var(--vp-c-brand-soft);
+  /* ---------- 覆盖 VitePress 品牌色 ---------- */
+  /* 中国红主色 */
+  --vp-c-brand-1: #c8102e;
+  --vp-c-brand-2: #a50d26;
+  --vp-c-brand-3: #e63946;
+  --vp-c-brand-soft: rgba(200, 16, 46, 0.1);
+
+  /* 按钮 */
+  --vp-button-brand-bg: #c8102e;
+  --vp-button-brand-hover-bg: #a50d26;
+  --vp-button-brand-active-bg: #8b0a1f;
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-text: #ffffff;
+
+  /* 链接 */
+  --vp-c-brand-1: #c8102e;
+  --vp-c-brand-2: #a50d26;
+
+  /* 首页 hero 渐变（如果有首页） */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, #c8102e 30%, #e63946);
+
+  /* ---------- 业务变量 ---------- */
+  --news-brand: #c8102e;
+  --news-brand-hover: #a50d26;
+  --news-brand-soft: rgba(200, 16, 46, 0.08);
 
   /* 文本 */
-  --news-text:    var(--vp-c-text-1);
-  --news-text-2:  var(--vp-c-text-2);
-  --news-muted:   var(--vp-c-text-3);
+  --news-text: var(--vp-c-text-1);
+  --news-text-2: var(--vp-c-text-2);
+  --news-muted: var(--vp-c-text-3);
 
   /* 背景 / 分割线 */
-  --news-bg:       var(--vp-c-bg);
-  --news-bg-soft:  var(--vp-c-bg-soft);
+  --news-bg: var(--vp-c-bg);
+  --news-bg-soft: var(--vp-c-bg-soft);
   --news-bg-hover: var(--vp-c-bg-alt);
-  --news-divider:  var(--vp-c-divider);
+  --news-divider: var(--vp-c-divider);
 
   /* 尺寸 */
-  --news-radius:      10px;
+  --news-radius: 10px;
   --news-radius-pill: 999px;
-  --news-gap:         8px;
-  --news-gap-lg:      28px;
-  --news-page-x:      0px;
+  --news-gap: 8px;
+  --news-gap-lg: 28px;
+  --news-page-x: 0px;
 
   /* 字号（桌面端） */
-  --news-fs-title:   28px;
+  --news-fs-title: 28px;
   --news-fs-heading: 16px;
-  --news-fs-body:    14px;
-  --news-fs-small:   12px;
+  --news-fs-body: 14px;
+  --news-fs-small: 12px;
 
   /* 触控目标 */
   --news-touch: 40px;
 
-  /* 标签语义色（浅色） */
-  --tag-release-fg: #2f855a;
-  --tag-release-bg: #2f855a11;
-  --tag-release-bd: #2f855a33;
+  /* ---------- 标签语义色（中国风配色） ---------- */
+  /* 发布 → 中国红 */
+  --tag-release-fg: #c8102e;
+  --tag-release-bg: rgba(200, 16, 46, 0.08);
+  --tag-release-bd: rgba(200, 16, 46, 0.22);
 
-  --tag-eco-fg: #3182ce;
-  --tag-eco-bg: #3182ce11;
-  --tag-eco-bd: #3182ce33;
+  /* 生态 → 藏青（中国传统色） */
+  --tag-eco-fg: #2c4c6e;
+  --tag-eco-bg: rgba(44, 76, 110, 0.08);
+  --tag-eco-bd: rgba(44, 76, 110, 0.22);
 
-  --tag-deep-fg: #805ad5;
-  --tag-deep-bg: #805ad511;
-  --tag-deep-bd: #805ad533;
+  /* 深度 → 紫檀 */
+  --tag-deep-fg: #7d4a7b;
+  --tag-deep-bg: rgba(125, 74, 123, 0.08);
+  --tag-deep-bd: rgba(125, 74, 123, 0.22);
 
-  --tag-sec-fg: #c53030;
-  --tag-sec-bg: #c5303011;
-  --tag-sec-bd: #c5303033;
+  /* 安全 → 琥珀 */
+  --tag-sec-fg: #b8860b;
+  --tag-sec-bg: rgba(184, 134, 11, 0.08);
+  --tag-sec-bd: rgba(184, 134, 11, 0.22);
 }
 
-/* 暗色标签色 */
+/* ---------- 暗色模式 ---------- */
 .dark {
-  --tag-release-fg: #68d391;
-  --tag-release-bg: #68d3911a;
-  --tag-release-bd: #68d39133;
+  /* 品牌色在暗色下稍微提亮 */
+  --vp-c-brand-1: #e63946;
+  --vp-c-brand-2: #c8102e;
+  --vp-c-brand-3: #ff5c6c;
+  --vp-c-brand-soft: rgba(230, 57, 70, 0.12);
 
-  --tag-eco-fg: #63b3ed;
-  --tag-eco-bg: #63b3ed1a;
-  --tag-eco-bd: #63b3ed33;
+  --vp-button-brand-bg: #c8102e;
+  --vp-button-brand-hover-bg: #e63946;
 
-  --tag-deep-fg: #b794f4;
-  --tag-deep-bg: #b794f41a;
-  --tag-deep-bd: #b794f433;
+  --news-brand: #e63946;
+  --news-brand-hover: #ff5c6c;
+  --news-brand-soft: rgba(230, 57, 70, 0.12);
 
-  --tag-sec-fg: #fc8181;
-  --tag-sec-bg: #fc81811a;
-  --tag-sec-bd: #fc818133;
+  /* 暗色标签色 */
+  --tag-release-fg: #ff7a86;
+  --tag-release-bg: rgba(230, 57, 70, 0.12);
+  --tag-release-bd: rgba(230, 57, 70, 0.3);
+
+  --tag-eco-fg: #7ba7d1;
+  --tag-eco-bg: rgba(123, 167, 209, 0.1);
+  --tag-eco-bd: rgba(123, 167, 209, 0.28);
+
+  --tag-deep-fg: #c79bc4;
+  --tag-deep-bg: rgba(199, 155, 196, 0.1);
+  --tag-deep-bd: rgba(199, 155, 196, 0.28);
+
+  --tag-sec-fg: #e8c252;
+  --tag-sec-bg: rgba(232, 194, 82, 0.1);
+  --tag-sec-bd: rgba(232, 194, 82, 0.28);
 }
 
-/* 响应式变量 */
+/* =========================================================
+   响应式变量
+   ========================================================= */
 @media (max-width: 1024px) {
   :root {
     --news-fs-title: 26px;
-    --news-gap-lg:   24px;
+    --news-gap-lg: 24px;
   }
 }
 
 @media (max-width: 768px) {
   :root {
-    --news-fs-title:   24px;
+    --news-fs-title: 24px;
     --news-fs-heading: 15px;
-    --news-fs-body:    13.5px;
-    --news-gap-lg:     22px;
+    --news-fs-body: 13.5px;
+    --news-gap-lg: 22px;
   }
 }
 
 @media (max-width: 640px) {
   :root {
-    --news-fs-title:   22px;
+    --news-fs-title: 22px;
     --news-fs-heading: 14px;
-    --news-fs-body:    13px;
-    --news-fs-small:   11px;
-    --news-gap:        6px;
-    --news-gap-lg:     20px;
+    --news-fs-body: 13px;
+    --news-fs-small: 11px;
+    --news-gap: 6px;
+    --news-gap-lg: 20px;
   }
 }
 
 @media (max-width: 480px) {
   :root {
     --news-fs-title: 20px;
-    --news-gap-lg:   18px;
+    --news-gap-lg: 18px;
   }
 }
