@@ -13,6 +13,9 @@
     "christian-kohler.path-intellisense",
 
     // 代码格式化
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+
+    // 代码格式化
+    "dbaeumer.vscode-eslint"
   ]
 }

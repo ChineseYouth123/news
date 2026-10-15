@@ -4,5 +4,11 @@
   "tabWidth": 2,
   "printWidth": 100,
   "trailingComma": "es5",
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "vueIndentScriptAndStyle": false,
+  "htmlWhitespaceSensitivity": "css",
+  "bracketSameLine": false,
+  "arrowParens": "always",
+  "quoteProps": "as-needed",
+  "embeddedLanguageFormatting": "auto"
 }
