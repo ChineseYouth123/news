@@ -7,6 +7,7 @@ import NewsList from './components/NewsList.vue';
 import ThankList from './components/ThankList.vue';
 import MaterialList from './components/MaterialList.vue';
 import MyLayout from './components/Layout.vue';
+import Icon from './components/Icon.vue';
 
 import './styles/vars.css';
 import './styles/base.css';
@@ -22,5 +23,6 @@ export default {
     app.component('NewsList', NewsList);
     app.component('MaterialList', MaterialList);
     app.component('ThankList', ThankList);
+    app.component('Icon', Icon);
   },
 };

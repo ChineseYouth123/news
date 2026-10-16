@@ -224,18 +224,20 @@ watch(
         <div class="vp-fs__mask" />
 
         <header class="vp-fs__top">
-          <button class="vp-fs__mode" @click="toggleView">
+          <div class="vp-fs__mode" @click="toggleView">
             {{ view === 'lyric' ? '封' : '词' }}
-          </button>
+          </div>
           <div class="vp-fs__top-right">
-            <button
-              class="vp-fs__icon vp-fs__icon--fullscreen"
+            <div
+              class="vp-fs__icon vp-fs__icon--fullscreen vp-fs__mode"
               title="全屏"
               @click="toggleNativeFullscreen"
             >
-              ⛶
-            </button>
-            <button class="vp-fs__icon" title="收起" @click="ui.closeFullscreen()">∨</button>
+              <Icon name="quanping" size="2rem" />
+            </div>
+            <div class="vp-fs__icon vp-fs__mode" title="收起" @click="ui.closeFullscreen()">
+              <Icon name="shouqi" size="2rem" />
+            </div>
           </div>
         </header>
 
@@ -253,11 +255,11 @@ watch(
             <div class="vp-fs__info">
               <h1 class="vp-fs__title">{{ track?.title ?? '未播放' }}</h1>
               <p class="vp-fs__artist">
-                <span class="vp-fs__icon-sm">👤</span>
+                <Icon name="user" size="1rem" class="vp-fs__icon-sm" />
                 {{ track?.artist ?? '—' }}
               </p>
               <p v-if="track?.album" class="vp-fs__album">
-                <span class="vp-fs__icon-sm">⊙</span>
+                <Icon name="cd" size="1rem" class="vp-fs__icon-sm" />
                 {{ track.album }}
               </p>
             </div>
@@ -285,11 +287,19 @@ watch(
 
         <footer class="vp-fs__bottom">
           <div class="vp-fs__ctrl">
-            <button @click="player.prev()" title="上一首">⏮</button>
-            <button class="primary" @click="player.togglePlay()">
-              {{ player.isPlaying ? '⏸' : '▶' }}
-            </button>
-            <button @click="player.next()" title="下一首">⏭</button>
+            <div @click="player.prev()" title="上一首">
+              <Icon name="shangyiqu" size="2rem" />
+            </div>
+            <div class="primary" @click="player.togglePlay()">
+              <!-- 播放按钮 -->
+              <Icon v-if="!player.isPlaying" name="play" size="3rem" />
+              <!-- 暂停按钮 -->
+              <Icon v-else name="zanting" size="2rem" />
+            </div>
+
+            <div @click="player.next()" title="下一首">
+              <Icon name="xiayiqu" size="2rem" />
+            </div>
           </div>
           <div class="vp-fs__progress">
             <span class="vp-fs__time">{{ fmtTime(player.currentTime) }}</span>
@@ -372,13 +382,20 @@ watch(
 }
 
 .vp-fs__mode {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 50px;
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.75);
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 26px;
+  font-weight: 600;
   cursor: pointer;
-  padding: 6px 14px;
+  /* padding: 6px 14px; */
   border-radius: 8px;
   transition: all 0.2s;
 }
@@ -390,25 +407,6 @@ watch(
 .vp-fs__top-right {
   display: flex;
   gap: 10px;
-}
-
-.vp-fs__icon {
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 20px;
-  cursor: pointer;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-.vp-fs__icon:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
 }
 
 /* ============ 主体 ============ */

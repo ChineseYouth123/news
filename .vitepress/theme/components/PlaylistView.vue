@@ -80,11 +80,11 @@ onMounted(load);
 <template>
   <div class="vp-pl">
     <div class="vp-pl__toolbar">
-      <label>数据源：</label>
-      <select v-model="providerName" @change="changeProvider">
-        <option value="local">本地文件</option>
-        <option value="api">API 接口</option>
-      </select>
+      <label>数据源：本地文件</label>
+      <!-- <select v-model="providerName" @change="changeProvider"> -->
+      <!-- <option value="local">本地文件</option> -->
+      <!-- <option value="api">API 接口</option> -->
+      <!-- </select> -->
     </div>
 
     <div v-if="loading" class="vp-pl__loading">加载中…</div>
@@ -118,7 +118,9 @@ onMounted(load);
           @click="playFn(i)"
         >
           <span class="idx">
-            <template v-if="currentTrackId === t.id && player.isPlaying">♪</template>
+            <template v-if="currentTrackId === t.id && player.isPlaying">
+              <Icon name="music" size="1rem" />
+            </template>
             <template v-else>{{ i + 1 }}</template>
           </span>
           <span class="title">{{ t.title }}</span>
