@@ -1,9 +1,13 @@
-<script setup lang="ts">
+<script setup>
 import DefaultTheme from 'vitepress/theme';
-import { onUnmounted } from 'vue';
-import FloatingPlayer from '../components/FloatingPlayer.vue';
-import FullscreenPlayer from '../components/FullscreenPlayer.vue';
-import { disposeAudioEngine } from '../audio/engine';
+import { onMounted, onUnmounted } from 'vue';
+import FloatingPlayer from './FloatingPlayer.vue';
+import FullscreenPlayer from './FullscreenPlayer.vue';
+import { initAudioEngine, disposeAudioEngine } from '../audio/engine';
+
+onMounted(() => {
+  initAudioEngine();
+});
 
 onUnmounted(() => {
   disposeAudioEngine();

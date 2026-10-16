@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { getProvider } from '../providers';
 
 export const usePlayerStore = defineStore('player', () => {
+  /* ============ state ============ */
   const queue = ref([]);
   const currentIndex = ref(-1);
   const isPlaying = ref(false);
@@ -12,47 +13,47 @@ export const usePlayerStore = defineStore('player', () => {
   const playMode = ref('order');
   const playlistInfo = ref(null);
 
-  const currentTrack = computed(() => {
-    const t = queue.value[currentIndex.value] ?? null;
-    console.log('[player] currentTrack 计算:', t?.title, '| index =', currentIndex.value);
-    return t;
-  });
+  /* ============ getters ============ */
+  /**
+   * 当前播放曲目
+   * queue 空 或 currentIndex = -1 时返回 null
+   * → 悬浮播放器用它判断显隐
+   */
+  const currentTrack = computed(() => queue.value[currentIndex.value] ?? null);
 
+  /* ============ actions ============ */
+
+  /**
+   * 加载歌单
+   * 关键：不自动设置 currentIndex，等用户点击某首歌时才播
+   */
   async function loadPlaylist(id) {
-    console.log('[player] loadPlaylist 开始, id =', id);
     const provider = getProvider();
     const playlist = await provider.getPlaylist(id);
-    console.log('[player] 歌单加载成功:', playlist.name, '| tracks =', playlist.tracks.length);
     playlistInfo.value = playlist;
     queue.value = playlist.tracks;
-    currentIndex.value = playlist.tracks.length ? 0 : -1;
-    console.log('[player] queue 已填充, currentIndex =', currentIndex.value);
+    // 不自动播放：currentIndex 保持 -1，悬浮播放器不显示
+    currentIndex.value = -1;
     return playlist;
   }
 
+  /**
+   * 播放指定下标的曲目
+   * 这是让悬浮播放器"出现"的触发点
+   */
   function playTrackAt(index) {
-    console.log('[player] playTrackAt 被调用, index =', index);
-    if (index < 0 || index >= queue.value.length) {
-      console.warn('[player] index 越界, 忽略');
-      return;
-    }
+    if (index < 0 || index >= queue.value.length) return;
     currentIndex.value = index;
     isPlaying.value = true;
-    console.log(
-      '[player] 状态已更新: currentIndex =',
-      currentIndex.value,
-      '| isPlaying =',
-      isPlaying.value,
-      '| track =',
-      queue.value[index]?.title
-    );
   }
 
+  /** 播放 / 暂停切换 */
   function togglePlay() {
+    if (!currentTrack.value) return;
     isPlaying.value = !isPlaying.value;
-    console.log('[player] togglePlay → isPlaying =', isPlaying.value);
   }
 
+  /** 下一首 */
   function next() {
     if (!queue.value.length) return;
     if (playMode.value === 'random') {
@@ -61,9 +62,9 @@ export const usePlayerStore = defineStore('player', () => {
       currentIndex.value = (currentIndex.value + 1) % queue.value.length;
     }
     isPlaying.value = true;
-    console.log('[player] next → index =', currentIndex.value);
   }
 
+  /** 上一首 */
   function prev() {
     if (!queue.value.length) return;
     if (playMode.value === 'random') {
@@ -72,16 +73,30 @@ export const usePlayerStore = defineStore('player', () => {
       currentIndex.value = (currentIndex.value - 1 + queue.value.length) % queue.value.length;
     }
     isPlaying.value = true;
-    console.log('[player] prev → index =', currentIndex.value);
   }
 
-  function setTrackDuration(index, duration) {
+  /**
+   * 停止播放并清空"当前曲目"信息
+   * 关键：保留 queue（歌单列表还在），只清掉 currentIndex
+   * 这样再次点击同一首歌时，playTrackAt 还能正常工作
+   */
+  function stop() {
+    isPlaying.value = false;
+    currentTime.value = 0;
+    duration.value = 0;
+    currentIndex.value = -1;
+    // queue 和 playlistInfo 保留，用户再次点歌时需要
+  }
+
+  /**
+   * 写回真实时长
+   * audio engine 探测到实际 duration 后调用
+   */
+  function setTrackDuration(index, realDuration) {
     if (index < 0 || index >= queue.value.length) return;
     const t = queue.value[index];
-    if (t && Number.isFinite(duration) && duration > 0) {
-      t.duration = duration;
-      // 强制触发响应式更新（如果 Vue 没追踪到深层属性）
-      queue.value = [...queue.value];
+    if (t && Number.isFinite(realDuration) && realDuration > 0) {
+      t.duration = realDuration;
     }
   }
 
@@ -95,11 +110,12 @@ export const usePlayerStore = defineStore('player', () => {
     playMode,
     playlistInfo,
     currentTrack,
-    setTrackDuration,
     loadPlaylist,
     playTrackAt,
     togglePlay,
     next,
     prev,
+    stop,
+    setTrackDuration,
   };
 });

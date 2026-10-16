@@ -1,8 +1,8 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { usePlayerStore } from '../stores/player';
 import { useUiStore } from '../stores/ui';
-import { initAudioEngine, seek } from '../audio/engine';
+import { seek } from '../audio/engine';
 import { fmtTime } from '../utils/format';
 import VinylDisc from './VinylDisc.vue';
 
@@ -13,38 +13,20 @@ import VinylDisc from './VinylDisc.vue';
 const player = usePlayerStore();
 const ui = useUiStore();
 
-/**
- * 面板展开状态
- * false = 只显示转盘（收起）
- * true  = 转盘 + 面板（展开）
- */
+/** 面板展开状态 */
 const opened = ref(false);
-
-/* ============================================================
- * 生命周期
- * ============================================================ */
-
-onMounted(() => {
-  // 初始化音频引擎（只执行一次，重复调用会被内部守卫拦截）
-  initAudioEngine();
-});
 
 /* ============================================================
  * 计算属性
  * ============================================================ */
 
-/** 当前播放的曲目对象，为 null 表示还没选过任何歌 */
 const track = computed(() => player.currentTrack);
 
-/** 播放进度百分比（0 ~ 100） */
 const progress = computed(() =>
   player.duration ? (player.currentTime / player.duration) * 100 : 0
 );
 
-/**
- * 是否显示悬浮播放器
- * 只有「有当前曲目」时才显示，避免用户没播放前就看到一个空的悬浮球
- */
+/** 有曲目才显示悬浮球 */
 const visible = computed(() => !!player.currentTrack);
 
 /* ============================================================
@@ -56,20 +38,24 @@ function togglePanel() {
   opened.value = !opened.value;
 }
 
-/** 关闭面板（回到只有转盘的状态） */
-function closePanel() {
+/** 最小化：收起面板 */
+function minimize() {
   opened.value = false;
 }
 
-/** 打开全屏播放器（由 ui store 控制显隐） */
+/** 全屏：先收起面板，再打开全屏 */
 function openFullscreen() {
+  opened.value = false;
   ui.openFullscreen();
 }
 
-/**
- * 点击进度条跳转
- * 计算点击位置相对进度条宽度的比例，转换为音频时间
- */
+/** 关闭：停止播放 + 清空队列 → 悬浮球自动消失 */
+function close() {
+  player.stop();
+  opened.value = false;
+}
+
+/** 进度条点击跳转 */
 function onSeek(e) {
   const el = e.currentTarget;
   const rect = el.getBoundingClientRect();
@@ -79,9 +65,8 @@ function onSeek(e) {
 </script>
 
 <template>
-  <!-- 根容器：只有有曲目时才渲染 -->
   <div v-if="visible" class="vp-fp" :class="{ expanded: opened }">
-    <!-- 转盘：点击展开 / 收起面板 -->
+    <!-- 转盘：点击展开 / 收起 -->
     <button
       class="vp-fp__disc"
       @click="togglePanel"
@@ -91,32 +76,77 @@ function onSeek(e) {
       <VinylDisc :cover="track?.cover" :spinning="player.isPlaying" :size="56" />
     </button>
 
-    <!-- 展开面板：收起时不渲染，节省 DOM 与事件 -->
+    <!-- 面板 -->
     <div v-if="opened" class="vp-fp__body">
-      <!-- 头部：歌曲信息 + 全屏 / 关闭按钮 -->
+      <!-- 头部 -->
       <div class="vp-fp__head">
         <div class="vp-fp__meta">
           <div class="vp-fp__title">{{ track?.title ?? '未播放' }}</div>
           <div class="vp-fp__artist">{{ track?.artist ?? '—' }}</div>
         </div>
+
+        <!-- 三个操作按钮：最小化 / 全屏 / 关闭 -->
         <div class="vp-fp__head-actions">
-          <button class="vp-fp__icon" @click="openFullscreen" title="全屏播放">⛶</button>
-          <button class="vp-fp__icon" @click="closePanel" title="关闭">✕</button>
+          <button class="vp-fp__icon" @click="minimize" title="最小化">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </button>
+
+          <button class="vp-fp__icon" @click="openFullscreen" title="全屏">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"
+              />
+            </svg>
+          </button>
+
+          <button class="vp-fp__icon" @click="close" title="关闭播放器">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
         </div>
       </div>
 
-      <!-- 进度条：点击跳转 -->
+      <!-- 进度条 -->
       <div class="vp-fp__bar" @click="onSeek">
         <div class="vp-fp__bar-fill" :style="{ width: progress + '%' }" />
       </div>
 
-      <!-- 时间：当前 / 总时长 -->
+      <!-- 时间 -->
       <div class="vp-fp__time">
         <span>{{ fmtTime(player.currentTime) }}</span>
         <span>{{ fmtTime(player.duration) }}</span>
       </div>
 
-      <!-- 控制按钮：上一首 / 播放暂停 / 下一首 -->
+      <!-- 播放控制 -->
       <div class="vp-fp__ctrl">
         <button @click="player.prev()" title="上一首">⏮</button>
         <button @click="player.togglePlay()" :title="player.isPlaying ? '暂停' : '播放'">
@@ -132,8 +162,6 @@ function onSeek(e) {
 /* ============================================================
  * 容器
  * ============================================================ */
-
-/* 默认桌面端：左下角 */
 .vp-fp {
   position: fixed;
   left: 20px;
@@ -156,7 +184,6 @@ function onSeek(e) {
     transform 0.25s ease;
 }
 
-/* 展开时：变成卡片（圆角变小、内边距变大、顶部微抬） */
 .vp-fp.expanded {
   border-radius: 16px;
   padding: 14px;
@@ -167,8 +194,7 @@ function onSeek(e) {
 /* ============================================================
  * 转盘
  * ============================================================ */
-
-.vp-fp__disc {
+/* .vp-fp__disc {
   background: none;
   border: none;
   padding: 0;
@@ -179,21 +205,36 @@ function onSeek(e) {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-}
-/* hover 时轻微放大 */
+} */
 .vp-fp__disc:hover {
   transform: scale(1.05);
 }
-/* 按下时轻微缩小，反馈感 */
 .vp-fp__disc:active {
   transform: scale(0.96);
 }
+.vp-fp {
+  transform-origin: left center;
+}
+
+.vp-fp__body {
+  transform-origin: 0% 50%; /* 转盘那一侧的中心 */
+  animation: vp-fp-pop 0.4s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+
+@keyframes vp-fp-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
 /* ============================================================
- * 展开面板
+ * 面板
  * ============================================================ */
-
-/* 固定宽度，动画上从左侧滑入 */
 .vp-fp__body {
   width: 240px;
   animation: vp-fp-fade-in 0.25s ease;
@@ -210,7 +251,6 @@ function onSeek(e) {
   }
 }
 
-/* 头部布局：左侧歌曲信息 + 右侧按钮组 */
 .vp-fp__head {
   display: flex;
   align-items: flex-start;
@@ -219,13 +259,11 @@ function onSeek(e) {
   margin-bottom: 10px;
 }
 
-/* 歌曲信息区域，min-width: 0 让内部的 ellipsis 生效 */
 .vp-fp__meta {
   min-width: 0;
   flex: 1;
 }
 
-/* 歌名：单行省略 */
 .vp-fp__title {
   font-size: 14px;
   font-weight: 600;
@@ -236,7 +274,6 @@ function onSeek(e) {
   line-height: 1.4;
 }
 
-/* 歌手名：更小、更淡 */
 .vp-fp__artist {
   font-size: 12px;
   color: var(--vp-c-text-2);
@@ -246,20 +283,19 @@ function onSeek(e) {
   text-overflow: ellipsis;
 }
 
-/* 右上角图标按钮组 */
+/* 三个按钮的容器 */
 .vp-fp__head-actions {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   flex-shrink: 0;
 }
 
-/* 图标按钮：24×24 命中区，圆角悬停背景 */
+/* 图标按钮：内联 SVG 用 currentColor 跟随文字色 */
 .vp-fp__icon {
   background: none;
   border: none;
   cursor: pointer;
   color: var(--vp-c-text-2);
-  font-size: 14px;
   width: 24px;
   height: 24px;
   border-radius: 6px;
@@ -276,11 +312,15 @@ function onSeek(e) {
   color: var(--vp-c-text-1);
   background: var(--vp-c-bg-mute);
 }
+/* 关闭按钮：hover 时变红，警示性 */
+.vp-fp__icon:last-child:hover {
+  color: #e05252;
+  background: rgba(224, 82, 82, 0.1);
+}
 
 /* ============================================================
  * 进度条
  * ============================================================ */
-
 .vp-fp__bar {
   height: 4px;
   background: var(--vp-c-divider);
@@ -288,39 +328,34 @@ function onSeek(e) {
   cursor: pointer;
   overflow: hidden;
   transition: height 0.15s;
-  touch-action: none; /* 阻止移动端默认滑动 */
+  touch-action: none;
 }
-/* hover 时加粗，方便点击 */
 .vp-fp__bar:hover {
   height: 6px;
 }
-
-/* 已播放部分 */
 .vp-fp__bar-fill {
   height: 100%;
   background: var(--vp-c-brand-1);
   border-radius: 2px;
   transition: width 0.1s linear;
-  pointer-events: none; /* 让点击落到父级 .vp-fp__bar */
+  pointer-events: none;
 }
 
 /* ============================================================
  * 时间
  * ============================================================ */
-
 .vp-fp__time {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
   color: var(--vp-c-text-3);
   margin-top: 4px;
-  font-variant-numeric: tabular-nums; /* 数字等宽，避免跳动 */
+  font-variant-numeric: tabular-nums;
 }
 
 /* ============================================================
  * 控制按钮
  * ============================================================ */
-
 .vp-fp__ctrl {
   display: flex;
   justify-content: center;
@@ -352,29 +387,24 @@ function onSeek(e) {
 }
 
 /* ============================================================
- * 移动端（< 640px）
+ * 移动端
  * ============================================================ */
-
 @media (max-width: 640px) {
   .vp-fp {
-    /* 关键：清掉 right + 保留 left，避免 fixed 下 left+right 被拉伸 */
     left: 12px;
     right: auto;
-    bottom: 12px;
+    bottom: 50px;
     padding: 6px;
     gap: 10px;
-    /* 限制最大宽度，防止展开面板溢出屏幕 */
     max-width: calc(100vw - 24px);
   }
 
-  /* 展开时紧凑一些 */
   .vp-fp.expanded {
     padding: 12px;
     border-radius: 14px;
     align-items: center;
   }
 
-  /* 面板宽度自适应，跟随屏幕 */
   .vp-fp__body {
     width: auto;
     flex: 1;
@@ -391,14 +421,11 @@ function onSeek(e) {
     margin-top: 1px;
   }
 
-  /* 移动端图标按钮加大点击区域 */
   .vp-fp__icon {
     width: 28px;
     height: 28px;
-    font-size: 15px;
   }
 
-  /* 进度条更细，视觉轻一点 */
   .vp-fp__bar {
     height: 3px;
   }
@@ -420,9 +447,8 @@ function onSeek(e) {
 }
 
 /* ============================================================
- * 超小屏（< 400px）
+ * 超小屏
  * ============================================================ */
-
 @media (max-width: 400px) {
   .vp-fp {
     left: 8px;
