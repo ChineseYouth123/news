@@ -2,7 +2,7 @@
 layout: page
 title: 文件预览
 sidebar: false
-aside: false
+aside: true
 footer: false
 ---
 

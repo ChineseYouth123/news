@@ -8,7 +8,7 @@ function toDate(v) {
 }
 
 // ============ 创建 Data Loader ============
-export default createContentLoader('blog/posts/**/*.md', {
+export default createContentLoader('blog/博客/**/*.md', {
   excerpt: false,
 
   transform(raw) {

@@ -53,8 +53,6 @@ const unsupportedDialog = ref({
 });
 
 function openFile(node) {
-  console.log('[MaterialList] 点击文件:', node.name, '| ext:', node.ext);
-
   // 支持预览的格式 → 跳预览页
   if (VIEW_PAGE_EXTS.includes(node.ext)) {
     const src = encodeURIComponent(node.url);
