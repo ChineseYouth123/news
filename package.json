@@ -17,12 +17,20 @@
     "vitepress": "^1.6.4"
   },
   "dependencies": {
+    "@vue-office/docx": "^1.6.3",
+    "@vue-office/excel": "^1.7.14",
+    "@vue-office/pdf": "^2.0.10",
+    "@vue-office/pptx": "^1.0.1",
+    "@vue/devtools-api": "^8.2.1",
     "colorthief": "^3.5.0",
     "fs-extra": "^11.4.1",
     "globby": "^16.2.4",
     "gray-matter": "^4.0.3",
+    "markdown-it": "^15.0.3",
     "music-metadata-browser": "^2.5.11",
     "pinia": "^4.1.0",
-    "sass-embedded": "^1.105.1"
+    "pptx-preview": "^1.0.7",
+    "sass-embedded": "^1.105.1",
+    "vue-demi": "^0.14.6"
   }
 }
