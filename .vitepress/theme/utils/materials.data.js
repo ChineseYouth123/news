@@ -12,7 +12,8 @@ const URL_PREFIX = '/materials';
 /** 文件扩展名 → 类型 */
 function fileType(name) {
   const ext = path.extname(name).toLowerCase().slice(1);
-  return ['pdf', 'epub', 'md', 'zip', 'txt'].includes(ext) ? ext : 'file';
+  // const known = ['pdf', 'epub', 'md', 'zip', 'txt', 'docx', 'doc', 'xlsx', 'xls', 'pptx', 'ppt'];
+  return ext;
 }
 
 /** 递归扫描目录，返回树节点数组 */
@@ -39,7 +40,6 @@ function scan(dir, urlPrefix) {
       });
     } else {
       const stat = fs.statSync(full);
-      console.log('entry.name---', entry.name);
 
       nodes.push({
         type: 'file',

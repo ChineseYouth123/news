@@ -87,7 +87,7 @@ export default defineConfig({
       },
     },
     optimizeDeps: {
-      include: ['clipboard'],
+      include: ['clipboard', '@vue-office/pdf', 'vue-demi'],
       exclude: ['vitepress-plugin-awesome-musicplayer'],
     },
     plugins: [materialsPlugin(MATERIALS_DIR, '/materials')],
