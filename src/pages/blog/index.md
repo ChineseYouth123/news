@@ -4,7 +4,6 @@ title: 博客动态
 
 <!-- src/blog/index.md -->
 <script setup>
-// import NewsList from '../../.vitepress/theme/components/NewsList.vue'
 </script>
 <!-- 组件 -->
 

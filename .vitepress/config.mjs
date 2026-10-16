@@ -1,12 +1,8 @@
 import { defineConfig } from 'vitepress';
 import path from 'path';
-
-import pathNode from 'node:path';
 import { fileURLToPath } from 'node:url';
-import materialsPlugin from './theme/plugins/materials';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const MATERIALS_DIR = path.resolve(__dirname, '@/materials');
 // -------------------------------------- VitePress 配置 ----------------------------
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -24,7 +20,7 @@ export default defineConfig({
   // 站点根目录其实文件夹位置
   srcDir: 'src/',
   //开启纯净链接
-  cleanUrls: true,
+  // cleanUrls: true,
 
   // 以下 layout 仅在 frontmatter 选项仅在使用默认主题时适用。
   // 指定页面的布局。
@@ -42,16 +38,19 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     // 侧边栏-菜单设置
     nav: [
-      { text: '首页', link: '/' },
-      { text: '博客', link: '/blog/' },
-      { text: '资料', link: '/materials/' },
+      { text: '首页', link: '/pages/' },
+      { text: '博客', link: '/pages/blog/' },
+      { text: '资料', link: '/pages/materials/' },
+      {
+        text: '更多',
+        items: [{ text: '音乐', link: '/pages/playlist' }],
+      },
       {
         text: '关于',
         activeMatch: `^/about/`,
         items: [
-          { text: '反馈与建议', link: '/about/faq' },
-          { text: '感谢', link: '/thanks/' },
-          { text: 'Releases', link: '/about/releases' },
+          { text: '反馈与建议', link: '/pages/about/faq' },
+          { text: '感谢', link: '/pages/thanks/' },
         ],
       },
     ],
@@ -62,7 +61,7 @@ export default defineConfig({
       label: '目录', // 设置为中文标题
     },
     // 侧边栏-菜单-子页面
-    sidebar: [{ text: '音乐', items: [{ text: '播放列表', link: '/playlist' }] }],
+    sidebar: [],
     // 搜索
     search: {
       provider: 'local', // 本地搜索
@@ -90,7 +89,6 @@ export default defineConfig({
       include: ['clipboard', '@vue-office/pdf', 'vue-demi'],
       exclude: ['vitepress-plugin-awesome-musicplayer'],
     },
-    plugins: [materialsPlugin(MATERIALS_DIR, '/materials')],
   },
   transformHead({ assets }) {
     // 相应地调整正则表达式以匹配字体

@@ -8,6 +8,7 @@ import ThankList from './components/ThankList.vue';
 import MaterialList from './components/MaterialList.vue';
 import MyLayout from './components/Layout.vue';
 import Icon from './components/Icon.vue';
+import NotFound from './components/NotFound.vue';
 
 import './styles/vars.css';
 import './styles/base.css';

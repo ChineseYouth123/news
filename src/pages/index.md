@@ -10,15 +10,15 @@ hero:
   tagline: My great project tagline
   # 首页图片
   image:
-    src: images/logo.png
+    src: ../images/logo.png
     alt: VitePress
   actions:
     - theme: brand
       text: 访问博客
-      link: /blog/
+      link: /pages/blog/
     - theme: brand
       text: 查看播放列表
-      link: /playlist
+      link: /pages/playlist
     - theme: github
       text: View on GitHub
       link: https://github.com/vuejs/vitepress

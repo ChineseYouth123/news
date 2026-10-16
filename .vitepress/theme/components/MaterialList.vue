@@ -59,7 +59,7 @@ function openFile(node) {
   if (VIEW_PAGE_EXTS.includes(node.ext)) {
     const src = encodeURIComponent(node.url);
     const title = encodeURIComponent(node.name);
-    const url = `/materials/viewer?src=${src}&title=${title}`;
+    const url = `/pages/materials/viewer?src=${src}&title=${title}`;
     console.log('[MaterialList] 跳转:', url);
     router.go(url);
     return;

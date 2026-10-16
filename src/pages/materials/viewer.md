@@ -10,4 +10,6 @@ footer: false
 import ViewerPage from '@theme/components/ViewerPage.vue';
 </script>
 
-<ViewerPage />
+<ClientOnly>
+  <ViewerPage />
+</ClientOnly>
