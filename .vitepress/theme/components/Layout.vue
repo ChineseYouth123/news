@@ -10,11 +10,12 @@ import { initAudioEngine, disposeAudioEngine } from '../audio/engine';
 onMounted(() => {
   initAudioEngine();
 
+  // 当点击首页左上角的标题 返回首页链接
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a');
     if (a && a.getAttribute('href') === '/') {
       e.preventDefault();
-      window.location.href = '/pages/';
+      window.location.href = '/';
     }
   });
 });

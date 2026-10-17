@@ -33,7 +33,7 @@ function goBack() {
 
       <!-- 操作按钮 -->
       <div class="actions">
-        <a class="btn btn--primary" :href="withBase('/pages/')">返回首页</a>
+        <a class="btn btn--primary" :href="withBase('/')">返回首页</a>
         <button class="btn btn--ghost" type="button" @click="goBack">返回上一页</button>
       </div>
 

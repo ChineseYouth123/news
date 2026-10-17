@@ -39,7 +39,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     // 侧边栏-菜单设置
     nav: [
-      { text: '首页', link: '/pages/' },
+      { text: '首页', link: '/' },
       { text: '博客', link: '/pages/blog/' },
       { text: '资料', link: '/pages/materials/' },
       {

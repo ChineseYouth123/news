@@ -10,7 +10,7 @@ hero:
   tagline: My great project tagline
   # 首页图片
   image:
-    src: ../images/logo.png
+    src: images/logo.png
     alt: VitePress
   actions:
     - theme: brand
