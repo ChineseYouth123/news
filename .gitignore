@@ -4,7 +4,7 @@ node_modules/
 # 忽略多层级文件夹
 .vitepress/cache/deps/
 .vitepress/cache/theme/
-src/.vitepress/cache/
+.vitepress/cache/
 .vitepress/dist
 
 ### Node ###
