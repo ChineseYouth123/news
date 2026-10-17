@@ -5,6 +5,10 @@ import BackToList from './BackToList.vue';
 import NotFound from './NotFound.vue';
 import FloatingPlayer from './FloatingPlayer.vue';
 import FullscreenPlayer from './FullscreenPlayer.vue';
+import BlogPostHeader from './BlogPostHeader.vue';
+import BackToTop from './BackToTop.vue'; // 记得引入回到顶部
+import TableViewToggle from './TableViewToggle.vue'; // 记得引入表格组件
+
 import { initAudioEngine, disposeAudioEngine } from '../audio/engine';
 
 onMounted(() => {
@@ -19,6 +23,7 @@ onMounted(() => {
     }
   });
 });
+
 onUnmounted(() => {
   disposeAudioEngine();
 });
@@ -29,6 +34,7 @@ onUnmounted(() => {
     <!-- 文章页正文上方 -->
     <template #doc-before>
       <BackToList />
+      <BlogPostHeader />
     </template>
 
     <!-- 自定义 404 -->
@@ -36,13 +42,23 @@ onUnmounted(() => {
       <NotFound />
     </template>
 
-    <!-- 悬浮播放器 + 全屏播放器 -->
+    <!-- 正文下方：挂载表格切换组件 -->
+    <template #doc-after>
+      <ClientOnly>
+        <TableViewToggle />
+      </ClientOnly>
+    </template>
+
+    <!-- 全局底部：播放器和回到顶部 -->
     <template #layout-bottom>
       <ClientOnly>
         <FloatingPlayer />
       </ClientOnly>
       <ClientOnly>
         <FullscreenPlayer />
+      </ClientOnly>
+      <ClientOnly>
+        <BackToTop />
       </ClientOnly>
     </template>
   </DefaultTheme.Layout>
