@@ -1,0 +1,43 @@
+/* ===== 博客文章页专属微调 ===== */
+
+/* 正文行高和段落间距，阅读更舒服 */
+.blog-post .vp-doc p {
+  line-height: 1.8;
+  margin-bottom: 1.2em;
+}
+
+/* 标题层级更分明 */
+.blog-post .vp-doc h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.blog-post .vp-doc h2 {
+  margin-top: 2.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+/* 代码块稍微加一点圆角和背景区分 */
+.blog-post .vp-doc div[class*='language-'] {
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+/* 引用块样式 */
+.blog-post .vp-doc blockquote {
+  border-left: 4px solid var(--vp-c-brand-1);
+  background: var(--vp-c-bg-soft);
+  padding: 0.8rem 1.2rem;
+  border-radius: 0 6px 6px 0;
+}
+
+/* 正文图片居中并限制宽度 */
+.blog-post .vp-doc img {
+  display: block;
+  margin: 1.5rem auto;
+  max-width: 100%;
+  border-radius: 6px;
+}
