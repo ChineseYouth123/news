@@ -9,12 +9,12 @@ const groups = [
     group: '网站建设',
     desc: '参与项目开发与维护~',
     members: [
-      {
-        name: '匿名',
-        desc: '协调设计',
-        avatar: '/thanks/user.png',
-        link: 'https://github.com/',
-      },
+      // {
+      //   name: '匿名',
+      //   desc: '协调设计',
+      //   avatar: '/thanks/user.png',
+      //   link: 'https://github.com/',
+      // },
       {
         name: 'deepseek',
         desc: '功能页与疑难项',
