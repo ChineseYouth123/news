@@ -3,7 +3,27 @@
   --vp-c-brand-1: #646cff;
   --vp-c-brand-2: #747bff;
 }
+/* 控制图片本身的大小 */
+.image-container .VPImage,
+.image-container .image-src {
+  width: 400px; /* 调整为你想的宽度 */
+  height: auto; /* 保持比例 */
+  max-width: 100%; /* 防止溢出 */
+  object-fit: contain; /* 保证图片不变形 */
+}
 
+/* 如果图片容器有固定大小，也需要一起调整 */
+.image-container {
+  width: 400px;
+  height: auto;
+}
+
+/* 针对那个背景层 image-bg，如果它也是跟图片绑定的，可能需要一起调 */
+.image-container .image-bg {
+  width: 400px;
+  height: 200px; /* 视你的原设计而定 */
+  background-size: contain;
+}
 /* ===== 博客文章页专属微调 ===== */
 
 /* 隐藏正文里自带的 H1，因为已经在 BlogPostHeader 里渲染了 */
@@ -114,4 +134,44 @@
 }
 .blog-post .vp-doc table::-webkit-scrollbar-track {
   background-color: transparent;
+}
+.image-container .image-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* 1. 建议把基础尺寸设置得比图片大一点，这样光才有向外扩散的空间 */
+  width: 120%;
+  height: 120%;
+
+  /* 2. 核心渐变：红到黄，最后透明 */
+  background: radial-gradient(
+    circle,
+    rgba(255, 0, 0, 0.8) 0%,
+    /* 核心红 (稍微提高一点透明度) */ rgba(255, 0, 0, 0.5) 30%,
+    /* 红色过渡 */ rgba(252, 186, 3, 0.4) 50%,
+    /* 中间变黄 */ rgba(252, 186, 3, 0) 70% /* 提前到70%透明，剩下的交给模糊 */
+  );
+
+  /* 3. 灵魂属性：边缘模糊 */
+  filter: blur(40px); /* 数值越大，边缘越朦胧、越发散 */
+
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+
+  /* 呼吸动画 */
+  animation: glow-breathe 4s infinite alternate ease-in-out;
+}
+
+@keyframes glow-breathe {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8); /* 配合放大后的基础尺寸，这里用0.8起步 */
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 1;
+  }
 }

@@ -7,7 +7,7 @@ hero:
   text: '探索、创造与沉淀'
   tagline: 发现 Vue 生态中最棒的工具，记录每一行思考。
   image:
-    src: images/logo.png
+    src: images/huanqigongnong.jpg
     alt: Logo
   actions:
     - theme: brand

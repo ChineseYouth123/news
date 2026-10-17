@@ -3,7 +3,7 @@
 const links = [
   {
     title: '博客文章',
-    desc: '记录前端开发、Vite 生态与日常思考。',
+    desc: '记录抖音分享、记录与日常思考。',
     icon: '📝',
     link: '/pages/blog/',
     color: 'var(--vp-c-brand-1)',
@@ -17,7 +17,7 @@ const links = [
   },
   {
     title: '音乐播放器',
-    desc: '沉浸式全屏播放，保留你的专属歌单。',
+    desc: '沉浸式全屏播放，红色专属歌单。',
     icon: '🎵',
     link: '/pages/playlist',
     color: '#3182ce',
@@ -37,7 +37,7 @@ const links = [
     <!-- 数据统计面板：移动端纵向堆叠，PC端横向排列 -->
     <div class="stats-panel">
       <div class="stat-item">
-        <span class="stat-num">100+</span>
+        <span class="stat-num">10+</span>
         <span class="stat-label">篇沉淀文章</span>
       </div>
       <div class="stat-item">
@@ -72,7 +72,7 @@ const links = [
 
 <style scoped>
 .home-extension {
-  max-width: 1152px;
+  /* max-width: 1152px; */
   margin: 0 auto;
   /* padding: 40px 24px 80px; */
 }
