@@ -5,6 +5,7 @@ node_modules/
 .vitepress/cache/deps/
 .vitepress/cache/theme/
 src/.vitepress/cache/
+.vitepress/dist
 
 ### Node ###
 # Logs

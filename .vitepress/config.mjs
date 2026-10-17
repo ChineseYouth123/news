@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress';
 import path from 'path';
 import { fileURLToPath } from 'node:url';
+import { chineseSearchOptimize, pagefindPlugin } from 'vitepress-plugin-pagefind';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // -------------------------------------- VitePress 配置 ----------------------------
@@ -85,6 +86,19 @@ export default defineConfig({
         // 或者其他你需要的别名
       },
     },
+    plugins: [
+      pagefindPlugin({
+        customSearchQuery: chineseSearchOptimize, // 中文分词优化
+        btnPlaceholder: '搜索',
+        placeholder: '搜索文档',
+        emptyText: '空空如也',
+        heading: '共: {{searchResult}} 条结果',
+        excludeSelector: ['img', 'a.header-anchor'], // 不索引图片和锚点链接
+        filter(searchItem, idx, originArray) {
+          return !searchItem.route.includes('404'); // 过滤掉 404 页面
+        },
+      }),
+    ],
     optimizeDeps: {
       include: ['clipboard', '@vue-office/pdf', 'vue-demi'],
       exclude: ['vitepress-plugin-awesome-musicplayer'],
