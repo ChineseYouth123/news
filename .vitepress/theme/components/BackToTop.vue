@@ -1,11 +1,20 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { useData } from 'vitepress';
 
+const { page } = useData();
 const showBackToTop = ref(false);
+
+// 👇 核心判断逻辑：只在文档预览页面显示
+const isDocPage = computed(() => {
+  const path = page.value.relativePath;
+  // 排除首页、404、和纯文件夹目录（比如 blog/index.md）
+  return path !== 'index.md' && !path.includes('404') && !path.endsWith('index.md');
+});
 
 // 监听滚动事件
 const handleScroll = () => {
-  // 当滚动超过 300px 时显示按钮
+  // 当滚动超过 300px 且当前是文档页时才显示
   showBackToTop.value = window.scrollY > 300;
 };
 
@@ -28,8 +37,14 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <!-- 👇 这里的 v-show 必须包含 isDocPage，确保非文档页永远不显示 -->
   <Transition name="fade">
-    <div v-show="showBackToTop" class="back-to-top" @click="scrollToTop" title="回到顶部">
+    <div
+      v-show="showBackToTop && isDocPage"
+      class="back-to-top"
+      @click="scrollToTop"
+      title="回到顶部"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"
@@ -48,22 +63,23 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+/* 保持不变 */
 .back-to-top {
   position: fixed;
-  bottom: 80px; /* 距离底部的高度，看你播放器会不会挡住，可以自己调 */
-  right: 30px; /* 距离右侧的宽度 */
+  bottom: 80px;
+  right: 30px;
   width: 44px;
   height: 44px;
   background-color: var(--vp-c-bg-soft);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 50%; /* 变成圆形 */
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--vp-c-text-2);
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 50; /* 确保在最上层 */
+  z-index: 50;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
@@ -71,11 +87,10 @@ onUnmounted(() => {
   color: var(--vp-c-brand-1);
   border-color: var(--vp-c-brand-1);
   background-color: var(--vp-c-bg);
-  transform: translateY(-4px); /* 悬停时稍微向上浮动 */
+  transform: translateY(-4px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Vue 的淡入淡出过渡动画 */
 .fade-enter-active,
 .fade-leave-active {
   transition:
