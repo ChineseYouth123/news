@@ -166,7 +166,8 @@ function formatSize(bytes) {
       <li v-for="node in currentList" :key="node.path">
         <!-- 目录 -->
         <div v-if="node.type === 'dir'" class="mb-item mb-item--dir" @click="enterDir(node)">
-          <span class="mb-icon mb-icon--dir">📁</span>
+          <!-- 暂停按钮 -->
+          <Icon class="mb-icon--dir" name="wenjianjia" size="3.5rem" />
           <span class="mb-name">{{ node.name }}</span>
           <span class="mb-count">{{ node.count }} 项</span>
           <span class="mb-arrow">›</span>
@@ -299,9 +300,8 @@ function formatSize(bytes) {
 }
 
 /* 目录 */
-.mb-icon--dir {
-  font-size: 20px;
-  flex-shrink: 0;
+:deep(.mb-icon--dir) {
+  color: var(--vp-c-brand-1) !important;
 }
 .mb-count {
   font-size: 12px;
