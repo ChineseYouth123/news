@@ -14,22 +14,22 @@
   transition: all 0.15s;
 }
 
-.news-tag[data-tag="发布"] {
+.news-tag[data-tag='发布'] {
   color: var(--tag-release-fg);
   background: var(--tag-release-bg);
   border-color: var(--tag-release-bd);
 }
-.news-tag[data-tag="生态"] {
+.news-tag[data-tag='生态'] {
   color: var(--tag-eco-fg);
   background: var(--tag-eco-bg);
   border-color: var(--tag-eco-bd);
 }
-.news-tag[data-tag="深度"] {
+.news-tag[data-tag='深度'] {
   color: var(--tag-deep-fg);
   background: var(--tag-deep-bg);
   border-color: var(--tag-deep-bd);
 }
-.news-tag[data-tag="安全"] {
+.news-tag[data-tag='安全'] {
   color: var(--tag-sec-fg);
   background: var(--tag-sec-bg);
   border-color: var(--tag-sec-bd);
@@ -119,6 +119,44 @@
   cursor: default;
   pointer-events: none;
   min-width: 20px;
+}
+
+/* Hero 区域入场动画 */
+.VPHero .container {
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+}
+
+.VPHero .main {
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) 0.1s both;
+}
+
+.VPHero .image {
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) 0.2s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 移动端减弱动画幅度，提升性能 */
+@media (max-width: 640px) {
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 @media (max-width: 768px) {
