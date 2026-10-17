@@ -151,6 +151,16 @@ export default withPwa(
         ];
       }
     },
+
+    transformPageData(pageData) {
+      // 判断是否是博客文章页，路径以 blog/ 开头且不是博客首页
+      const isBlogPost =
+        pageData.relativePath.startsWith('blog/') && pageData.relativePath !== 'blog/index.md';
+
+      if (isBlogPost) {
+        pageData.frontmatter.pageClass = 'blog-post';
+      }
+    },
   })
 );
 
@@ -192,14 +202,4 @@ function copyMaterialsPlugin() {
       console.log('[copy-materials] 资料复制完成，已跳过 .md');
     },
   };
-}
-
-function transformPageData(pageData) {
-  // 判断是否是博客文章页，路径以 blog/ 开头且不是博客首页
-  const isBlogPost =
-    pageData.relativePath.startsWith('blog/') && pageData.relativePath !== 'blog/index.md';
-
-  if (isBlogPost) {
-    pageData.frontmatter.pageClass = 'blog-post';
-  }
 }

@@ -3,6 +3,7 @@ import DefaultTheme from 'vitepress/theme';
 import { createPinia } from 'pinia';
 import VueViewer from 'v-viewer'; // 引入 v-viewer
 import 'viewerjs/dist/viewer.css'; // 必须引入样式
+import './custom.css';
 
 import NewsList from './components/NewsList.vue';
 import ThankList from './components/ThankList.vue';
