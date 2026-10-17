@@ -1,125 +1,182 @@
 import { defineConfig } from 'vitepress';
 import path from 'path';
+import { withPwa } from '@vite-pwa/vitepress';
 import { fileURLToPath } from 'node:url';
 import { chineseSearchOptimize, pagefindPlugin } from 'vitepress-plugin-pagefind';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // -------------------------------------- VitePress 配置 ----------------------------
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
-  // 站点级选项
-  // 链接
-  base: '/',
-  lang: 'zh-CN', //语言，可选 en-US
-  // 站点标题
-  title: '笔记',
-  logo: '/logo.png',
-  // 标题的后缀。
-  titleTemplate: 'Vite & Vue powered static site generator',
-  // 站点描述
-  description: '发现和创造的文档。',
-  // 站点根目录其实文件夹位置
-  srcDir: 'src/',
-  //开启纯净链接
-  // cleanUrls: true,
+export default withPwa(
+  defineConfig({
+    // 站点级选项
+    // 链接
+    base: '/',
+    lang: 'zh-CN', //语言，可选 en-US
+    // 站点标题
+    title: '笔记',
+    logo: '/logo.png',
+    // 标题的后缀。
+    titleTemplate: 'Vite & Vue powered static site generator',
+    // 站点描述
+    description: '发现和创造的文档。',
+    // 站点根目录其实文件夹位置
+    srcDir: 'src/',
+    //开启纯净链接
+    // cleanUrls: true,
 
-  // 以下 layout 仅在 frontmatter 选项仅在使用默认主题时适用。
-  // 指定页面的布局。
-  layout: 'page',
-  // 是否显示导航栏。
-  navbar: false,
-  // 是否显示 侧边栏。
-  sidebar: true,
-  // 定义侧边栏组件在 doc 布局中的位置。
-  aside: false,
-  // 监控
-  watch: ['path/to/files/**/*'],
-  // 主题相关配置
-  themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
-    // 侧边栏-菜单设置
-    nav: [
-      { text: '首页', link: '/' },
-      { text: '博客', link: '/pages/blog/' },
-      { text: '资料', link: '/pages/materials/' },
-      {
-        text: '更多',
-        items: [{ text: '音乐', link: '/pages/playlist' }],
-      },
-      {
-        text: '关于',
-        activeMatch: `^/about/`,
-        items: [
-          { text: '反馈与建议', link: '/pages/about/faq' },
-          { text: '感谢', link: '/pages/thanks/' },
-        ],
-      },
-    ],
-    outline: {
-      // 显示层级：数字(如 2 只显示 h2)、数组(如 [2, 4] 显示 h2 到 h4)、'deep'(等于 [2, 6])
-      level: 'deep', // 推荐 'deep'，显示所有 h2 到 h6 标题
-      // 自定义目录标题（默认是英文的 "On this page"）
-      label: '目录', // 设置为中文标题
-    },
-    // 侧边栏-菜单-子页面
-    sidebar: [],
-    // 搜索
-    search: {
-      provider: 'local', // 本地搜索
-    },
-    returnToTopLabel: '回到顶部',
-    sidebarMenuLabel: '菜单',
-    darkModeSwitchLabel: '主题',
-    lightModeSwitchTitle: '切换到浅色模式',
-    darkModeSwitchTitle: '切换到深色模式',
-    langMenuLabel: '切换语言',
-    externalLinkIcon: true,
-    socialLinks: [{ icon: 'github', link: 'https://github.com/vuejs/vitepress' }],
-    footer: {
-      copyright: `本中文文档采用 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 (CC BY-NC-SA 4.0) 进行许可。`,
-    },
-  },
-  vite: {
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, '/src'), // 指向你的源目录
-        // 或者其他你需要的别名
-      },
-    },
-    plugins: [
-      pagefindPlugin({
-        customSearchQuery: chineseSearchOptimize, // 中文分词优化
-        btnPlaceholder: '搜索',
-        placeholder: '搜索文档',
-        emptyText: '空空如也',
-        heading: '共: {{searchResult}} 条结果',
-        excludeSelector: ['img', 'a.header-anchor'], // 不索引图片和锚点链接
-        filter(searchItem, idx, originArray) {
-          return !searchItem.route.includes('404'); // 过滤掉 404 页面
+    // 以下 layout 仅在 frontmatter 选项仅在使用默认主题时适用。
+    // 指定页面的布局。
+    layout: 'page',
+    // 是否显示导航栏。
+    navbar: false,
+    // 是否显示 侧边栏。
+    sidebar: true,
+    // 定义侧边栏组件在 doc 布局中的位置。
+    aside: false,
+    // 监控
+    watch: ['path/to/files/**/*'],
+    // 主题相关配置
+    themeConfig: {
+      // https://vitepress.dev/reference/default-theme-config
+      // 侧边栏-菜单设置
+      nav: [
+        { text: '首页', link: '/' },
+        { text: '博客', link: '/pages/blog/' },
+        { text: '资料', link: '/pages/materials/' },
+        {
+          text: '更多',
+          items: [{ text: '音乐', link: '/pages/playlist' }],
         },
-      }),
-    ],
-    optimizeDeps: {
-      include: ['clipboard', '@vue-office/pdf', 'vue-demi'],
-      exclude: ['vitepress-plugin-awesome-musicplayer'],
+        {
+          text: '关于',
+          activeMatch: `^/about/`,
+          items: [
+            { text: '反馈与建议', link: '/pages/about/faq' },
+            { text: '感谢', link: '/pages/thanks/' },
+          ],
+        },
+      ],
+      outline: {
+        // 显示层级：数字(如 2 只显示 h2)、数组(如 [2, 4] 显示 h2 到 h4)、'deep'(等于 [2, 6])
+        level: 'deep', // 推荐 'deep'，显示所有 h2 到 h6 标题
+        // 自定义目录标题（默认是英文的 "On this page"）
+        label: '目录', // 设置为中文标题
+      },
+      // 侧边栏-菜单-子页面
+      sidebar: [],
+      // 搜索
+      search: {
+        provider: 'local', // 本地搜索
+      },
+      returnToTopLabel: '回到顶部',
+      sidebarMenuLabel: '菜单',
+      darkModeSwitchLabel: '主题',
+      lightModeSwitchTitle: '切换到浅色模式',
+      darkModeSwitchTitle: '切换到深色模式',
+      langMenuLabel: '切换语言',
+      externalLinkIcon: true,
+      socialLinks: [{ icon: 'github', link: 'https://github.com/vuejs/vitepress' }],
+      footer: {
+        copyright: `本中文文档采用 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 (CC BY-NC-SA 4.0) 进行许可。`,
+      },
     },
-  },
-  transformHead({ assets }) {
-    // 相应地调整正则表达式以匹配字体
-    const myFontFile = assets.find((file) => /font-name\.[\w-]+\.woff2/.test(file));
-    if (myFontFile) {
-      return [
-        [
-          'link',
+    pwa: {
+      // 自动更新 Service Worker
+      registerType: 'autoUpdate',
+      // 自动注入注册代码
+      injectRegister: 'auto',
+
+      // 缓存策略配置
+      workbox: {
+        // 需要被缓存的静态资源
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,txt,woff2}'],
+        // 针对大文件（如 PDF 或视频）调大缓存限制
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
+        // 排除不需要缓存的文件
+        globIgnores: ['**/assets/chunks/**', '**/materials/**'],
+      },
+
+      // 应用清单 (manifest.json)
+      manifest: {
+        name: '我的笔记',
+        short_name: '笔记',
+        description: '发现和创造的文档。',
+        theme_color: '#ffffff',
+        background_color: '#ffffff',
+        display: 'standalone', // 独立应用模式（全屏，无地址栏）
+        icons: [
           {
-            rel: 'preload',
-            href: myFontFile,
-            as: 'font',
-            type: 'font/woff2',
-            crossorigin: '',
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
           },
         ],
-      ];
-    }
-  },
-});
+        screenshots: [
+          {
+            src: '/screenshot-wide.png',
+            sizes: '1280x720',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: '桌面端预览',
+          },
+          {
+            src: '/screenshot-narrow.png',
+            sizes: '720x1280',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: '移动端预览',
+          },
+        ],
+      },
+    },
+    vite: {
+      resolve: {
+        alias: {
+          '@': path.resolve(__dirname, '/src'), // 指向你的源目录
+          // 或者其他你需要的别名
+        },
+      },
+      plugins: [
+        pagefindPlugin({
+          customSearchQuery: chineseSearchOptimize, // 中文分词优化
+          btnPlaceholder: '搜索',
+          placeholder: '搜索文档',
+          emptyText: '空空如也',
+          heading: '共: {{searchResult}} 条结果',
+          excludeSelector: ['img', 'a.header-anchor'], // 不索引图片和锚点链接
+          filter(searchItem, idx, originArray) {
+            return !searchItem.route.includes('404'); // 过滤掉 404 页面
+          },
+        }),
+      ],
+      optimizeDeps: {
+        include: ['clipboard', '@vue-office/pdf', 'vue-demi'],
+        exclude: ['vitepress-plugin-awesome-musicplayer'],
+      },
+    },
+    transformHead({ assets }) {
+      // 相应地调整正则表达式以匹配字体
+      const myFontFile = assets.find((file) => /font-name\.[\w-]+\.woff2/.test(file));
+      if (myFontFile) {
+        return [
+          [
+            'link',
+            {
+              rel: 'preload',
+              href: myFontFile,
+              as: 'font',
+              type: 'font/woff2',
+              crossorigin: '',
+            },
+          ],
+        ];
+      }
+    },
+  })
+);
