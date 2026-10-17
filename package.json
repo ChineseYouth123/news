@@ -17,7 +17,8 @@
     "fast-glob": "^3.3.3",
     "terser": "^5.51.2",
     "vite-plugin-pwa": "^2.0.0",
-    "vitepress": "^1.6.4"
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-rss": "^0.4.5"
   },
   "dependencies": {
     "@vue-office/docx": "^1.6.3",
