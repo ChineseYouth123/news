@@ -1,12 +1,10 @@
 import { defineConfig } from 'vitepress';
 import path from 'path';
+import fs from 'fs';
 import { withPwa } from '@vite-pwa/vitepress';
-import { fileURLToPath } from 'node:url';
 import { RssPlugin } from 'vitepress-plugin-rss';
-import { chineseSearchOptimize, pagefindPlugin } from 'vitepress-plugin-pagefind';
 import { siteMeta, rssOptions } from '../siteConfig.js';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { chineseSearchOptimize, pagefindPlugin } from 'vitepress-plugin-pagefind';
 
 export default withPwa(
   defineConfig({
@@ -16,7 +14,6 @@ export default withPwa(
     title: siteMeta.title,
     description: siteMeta.description,
     logo: siteMeta.logo,
-
     head: [
       [
         'link',
@@ -128,6 +125,8 @@ export default withPwa(
           },
         }),
         RssPlugin(rssOptions),
+        // 复制资料文件夹的数据到dist
+        copyMaterialsPlugin(),
       ],
       optimizeDeps: {
         include: ['clipboard', '@vue-office/pdf', 'vue-demi'],
@@ -154,3 +153,42 @@ export default withPwa(
     },
   })
 );
+
+// 复制资料文件夹的数据到dist
+// 自定义复制插件：在构建结束后，把 src/blog/资料 复制到 dist/blog/资料，跳过 .md
+function copyMaterialsPlugin() {
+  // 获取项目根目录的绝对路径
+  // 项目根目录 = .vitepress 的上一级
+  const projectRoot = path.resolve(__dirname, '..');
+  const sourceDir = path.resolve(projectRoot, 'src/blog/资料').replace(/\\/g, '/');
+  return {
+    name: 'copy-materials',
+    buildEnd() {
+      const src = sourceDir;
+      const dest = path.resolve(projectRoot, '.vitepress/dist/blog/资料');
+
+      if (!fs.existsSync(src)) {
+        console.warn('[copy-materials] 源目录不存在:', src);
+        return;
+      }
+
+      // 递归复制，跳过 .md 文件
+      function copyRecursive(srcDir, destDir) {
+        fs.mkdirSync(destDir, { recursive: true });
+        for (const entry of fs.readdirSync(srcDir, { withFileTypes: true })) {
+          const srcPath = path.join(srcDir, entry.name);
+          const destPath = path.join(destDir, entry.name);
+
+          if (entry.isDirectory()) {
+            copyRecursive(srcPath, destPath);
+          } else if (!entry.name.endsWith('.md')) {
+            fs.copyFileSync(srcPath, destPath);
+          }
+        }
+      }
+
+      copyRecursive(src, dest);
+      console.log('[copy-materials] 资料复制完成，已跳过 .md');
+    },
+  };
+}
