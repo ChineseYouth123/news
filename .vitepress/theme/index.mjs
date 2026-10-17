@@ -1,14 +1,14 @@
-// docs/.vitepress/theme/index.ts
+// .vitepress/theme/index.ts
 import DefaultTheme from 'vitepress/theme';
-import { h } from 'vue';
 import { createPinia } from 'pinia';
+import VueViewer from 'v-viewer'; // 引入 v-viewer
+import 'viewerjs/dist/viewer.css'; // 必须引入样式
 
 import NewsList from './components/NewsList.vue';
 import ThankList from './components/ThankList.vue';
 import MaterialList from './components/MaterialList.vue';
 import MyLayout from './components/Layout.vue';
 import Icon from './components/Icon.vue';
-import NotFound from './components/NotFound.vue';
 
 import './styles/vars.css';
 import './styles/base.css';
@@ -18,12 +18,14 @@ import './styles/thanks.css';
 
 export default {
   extends: DefaultTheme,
-  Layout: MyLayout, // ← 用你的自定义 Layout
+  Layout: MyLayout,
   enhanceApp({ app }) {
     app.use(createPinia());
     app.component('NewsList', NewsList);
     app.component('MaterialList', MaterialList);
     app.component('ThankList', ThankList);
     app.component('Icon', Icon);
+    app.use(VueViewer); // 注册 v-viewer（全局指令、组件、API 都可用）
+    app.component('NewsList', NewsList);
   },
 };

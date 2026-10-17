@@ -2,23 +2,22 @@
 import { computed, ref } from 'vue';
 import { useRouter } from 'vitepress';
 import { data as materialsData } from '../utils/materials.data';
+import { api as viewerApi } from 'v-viewer';
 
 const { tree, totalFiles } = materialsData;
 const router = useRouter();
 
 /* ============================================================
- * 当前路径：数组形式的节点链
+ * 当前路径
  * ============================================================ */
-const stack = ref([]); // [{ name, path, node }]
+const stack = ref([]);
 
-/* 当前节点下的 children（root 时取 tree） */
 const currentList = computed(() => {
   if (stack.value.length === 0) return tree;
   const last = stack.value[stack.value.length - 1];
   return last.node.children ?? [];
 });
 
-/* 面包屑：始终以「全部」开头 */
 const breadcrumbs = computed(() => [
   { name: '全部资料', path: '' },
   ...stack.value.map((s) => ({ name: s.name, path: s.path })),
@@ -33,50 +32,75 @@ function enterDir(node) {
 }
 
 function jumpTo(index) {
-  // index = -1 表示「全部」
   if (index < 0) stack.value = [];
   else stack.value = stack.value.slice(0, index + 1);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 /* ============================================================
- * 打开文件
+ * 格式判断与点击逻辑
  * ============================================================ */
-const VIEW_PAGE_EXTS = ['pdf', 'docx', 'xlsx', 'xls', 'pptx'];
+const DOC_PAGE_EXTS = ['pdf', 'docx', 'xlsx', 'xls', 'pptx'];
+const IMAGE_EXTS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'];
 
-/* ============================================================
- * 不支持格式的弹窗状态
- * ============================================================ */
-const unsupportedDialog = ref({
-  visible: false,
-  file: null, // { name, url, ext }
-});
+const unsupportedDialog = ref({ visible: false, file: null });
 
 function openFile(node) {
-  // 支持预览的格式 → 跳预览页
-  if (VIEW_PAGE_EXTS.includes(node.ext)) {
+  // 1. 图片 → v-viewer 预览
+  if (IMAGE_EXTS.includes(node.ext)) {
+    const imageUrls = currentList.value
+      .filter((n) => n.type === 'file' && IMAGE_EXTS.includes(n.ext))
+      .map((n) => n.url);
+    const currentIndex = imageUrls.indexOf(node.url);
+
+    viewerApi({
+      options: {
+        // 使用显式的 size 配置，保留点击事件
+        toolbar: {
+          zoomIn: { show: true, size: 'large' },
+          zoomOut: { show: true, size: 'large' },
+          reset: { show: true, size: 'large' },
+          prev: { show: true, size: 'large' },
+          next: { show: true, size: 'large' },
+          rotateLeft: { show: true, size: 'large' },
+          rotateRight: { show: true, size: 'large' },
+          oneToOne: false,
+          play: false,
+          flipHorizontal: false,
+          flipVertical: false,
+        },
+        navbar: true, // 导航图片栏
+        title: false,
+        tooltip: true,
+        movable: true,
+        transition: true,
+        fullscreen: false,
+        keyboard: true,
+      },
+      images: imageUrls,
+    }).view(currentIndex >= 0 ? currentIndex : 0);
+    return;
+  }
+
+  // 2. 文档 → 预览页
+  if (DOC_PAGE_EXTS.includes(node.ext)) {
     const src = encodeURIComponent(node.url);
     const title = encodeURIComponent(node.name);
     const url = `/pages/materials/viewer?src=${src}&title=${title}`;
-    console.log('[MaterialList] 跳转:', url);
     router.go(url);
     return;
   }
 
-  // MD → VitePress 站内路由
+  // 3. MD → 站内路由
   if (node.ext === 'md') {
     router.go(node.url.replace(/\.md$/, ''));
     return;
   }
 
-  // 其他格式 → 弹窗提示
-  unsupportedDialog.value = {
-    visible: true,
-    file: node,
-  };
+  // 4. 其他格式
+  unsupportedDialog.value = { visible: true, file: node };
 }
 
-/* 确认下载 */
 function confirmDownload() {
   const file = unsupportedDialog.value.file;
   if (file) {
@@ -90,23 +114,14 @@ function confirmDownload() {
   closeDialog();
 }
 
-/* 关闭弹窗 */
 function closeDialog() {
-  unsupportedDialog.value = {
-    visible: false,
-    file: null,
-  };
+  unsupportedDialog.value = { visible: false, file: null };
 }
+
 /* ============================================================
  * 展示辅助
  * ============================================================ */
-const TYPE_LABEL = {
-  pdf: 'PDF',
-  epub: 'EPUB',
-  md: 'MD',
-  zip: 'ZIP',
-  txt: 'TXT',
-};
+const TYPE_LABEL = { pdf: 'PDF', epub: 'EPUB', md: 'MD', zip: 'ZIP', txt: 'TXT' };
 
 function typeLabel(ext) {
   return TYPE_LABEL[ext] ?? ext.toUpperCase();
@@ -134,7 +149,6 @@ function formatSize(bytes) {
       </p>
     </header>
 
-    <!-- 面包屑 -->
     <nav class="mb-breadcrumb" aria-label="目录导航">
       <template v-for="(c, i) in breadcrumbs" :key="c.path">
         <span v-if="i > 0" class="mb-sep">/</span>
@@ -148,7 +162,6 @@ function formatSize(bytes) {
       </template>
     </nav>
 
-    <!-- 列表 -->
     <ul v-if="currentList.length" class="mb-list">
       <li v-for="node in currentList" :key="node.path">
         <!-- 目录 -->
@@ -161,9 +174,12 @@ function formatSize(bytes) {
 
         <!-- 文件 -->
         <div v-else class="mb-item mb-item--file" @click="openFile(node)">
-          <span class="material-type-badge" :data-type="node.ext">
+          <!-- 缩略图：放大到 48x48 的圆角矩形 -->
+          <img v-if="IMAGE_EXTS.includes(node.ext)" :src="node.url" class="mb-thumb" alt="" />
+          <span v-else class="material-type-badge" :data-type="node.ext">
             {{ typeLabel(node.ext) }}
           </span>
+
           <span class="mb-name">{{ node.name }}</span>
           <span class="mb-meta">
             <span v-if="node.size">{{ formatSize(node.size) }}</span>
@@ -262,55 +278,79 @@ function formatSize(bytes) {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px; /* 稍微拉开一点间距 */
 }
 
 .mb-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: 10px;
+  gap: 16px;
+  padding: 10px 16px;
+  border-radius: 12px;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: all 0.15s;
+  transition: all 0.2s ease;
   font-size: 14px;
 }
 .mb-item:hover {
   background: var(--vp-c-bg-soft);
   border-color: var(--vp-c-brand-1);
+  transform: translateY(-1px);
 }
 
 /* 目录 */
 .mb-icon--dir {
-  font-size: 18px;
+  font-size: 20px;
   flex-shrink: 0;
 }
 .mb-count {
   font-size: 12px;
   color: var(--vp-c-text-3);
-  padding: 1px 8px;
+  padding: 2px 8px;
   border-radius: 10px;
   background: var(--vp-c-bg-soft);
   flex-shrink: 0;
 }
 
-/* 文件 */
+/* 文件类型标签 */
 .material-type-badge {
   flex-shrink: 0;
-  min-width: 42px;
-  text-align: center;
-  font-size: 10px;
+  width: 48px; /* 与缩略图保持宽度一致 */
+  height: 48px; /* 与缩略图保持高度一致 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.05em;
-  padding: 3px 6px;
-  border-radius: 4px;
+  border-radius: 8px;
   background: var(--vp-c-brand-soft, rgba(62, 175, 124, 0.12));
   color: var(--vp-c-brand-1);
 }
 .material-type-badge[data-type='pdf'] {
   background: rgba(224, 82, 82, 0.12);
   color: #e05252;
+}
+
+/* ============================================================
+ * 列表情况：头部缩略图大小与质感优化
+ * ============================================================ */
+.mb-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover; /* 保持图片比例，不拉伸 */
+  border-radius: 8px; /* 圆角更现代 */
+  flex-shrink: 0;
+  border: 1px solid var(--vp-c-divider);
+  background-color: var(--vp-c-bg-mute);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* 增加一点细微阴影 */
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.mb-item:hover .mb-thumb {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .mb-name {
@@ -320,6 +360,7 @@ function formatSize(bytes) {
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--vp-c-text-1);
+  font-weight: 500;
 }
 
 .mb-meta {
@@ -330,15 +371,16 @@ function formatSize(bytes) {
 
 .mb-arrow {
   color: var(--vp-c-text-3);
-  font-size: 16px;
+  font-size: 18px;
   flex-shrink: 0;
-  transition: transform 0.15s;
+  transition: all 0.15s;
 }
 .mb-item:hover .mb-arrow {
   color: var(--vp-c-brand-1);
+  transform: translateX(2px);
 }
 .mb-arrow--ext {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .news-empty {
@@ -348,7 +390,7 @@ function formatSize(bytes) {
 }
 
 /* ============================================================
- * 弹窗
+ * 不支持格式弹窗
  * ============================================================ */
 .mb-dialog__mask {
   position: fixed;
@@ -448,5 +490,25 @@ function formatSize(bytes) {
 .mb-dialog-fade-enter-from .mb-dialog,
 .mb-dialog-fade-leave-to .mb-dialog {
   transform: scale(0.95);
+}
+
+/* 美化底部缩略图导航栏 */
+.viewer-navbar {
+  background: rgba(20, 20, 22, 0.9) !important;
+  backdrop-filter: blur(10px) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 调整缩略图列表的间距和内边距 */
+.viewer-list > li {
+  padding: 2px !important;
+  border-radius: 4px !important;
+  transition: opacity 0.2s ease !important;
+}
+
+/* 当前选中的缩略图高亮 */
+.viewer-list > li.viewer-active {
+  opacity: 1 !important;
+  box-shadow: 0 0 0 2px var(--vp-c-brand-1) !important;
 }
 </style>
