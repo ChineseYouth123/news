@@ -10,25 +10,19 @@ console.log('[viewer] ========== 组件 setup 开始 ==========');
  * ============================================================ */
 
 const VueOfficeDocx = defineClientComponent(async () => {
-  console.log('[viewer] 加载 @vue-office/docx');
   const mod = await import('@vue-office/docx');
   await import('@vue-office/docx/lib/index.css').catch(() => {});
-  console.log('[viewer] @vue-office/docx 就绪');
   return mod.default;
 });
 
 const VueOfficeExcel = defineClientComponent(async () => {
-  console.log('[viewer] 加载 @vue-office/excel');
   const mod = await import('@vue-office/excel');
   await import('@vue-office/excel/lib/index.css').catch(() => {});
-  console.log('[viewer] @vue-office/excel 就绪');
   return mod.default;
 });
 
 const VueOfficePptx = defineClientComponent(async () => {
-  console.log('[viewer] 加载 @vue-office/pptx');
   const mod = await import('@vue-office/pptx');
-  console.log('[viewer] @vue-office/pptx 就绪');
   return mod.default;
 });
 
@@ -50,7 +44,6 @@ const fileSrc = computed(() => {
   if (!src) {
     src = route.query?.src || route.data?.query?.src || '';
   }
-  console.log('[viewer] fileSrc =', src);
   return src;
 });
 
@@ -59,7 +52,6 @@ const title = computed(() => {
   if (!t) {
     t = route.query?.title || route.data?.query?.title || '';
   }
-  console.log('[viewer] title =', t);
   return t || '文件预览';
 });
 
@@ -69,7 +61,6 @@ const title = computed(() => {
 const ext = computed(() => {
   const m = (title.value || fileSrc.value).match(/\.([^.?#]+)$/);
   const e = m ? m[1].toLowerCase() : '';
-  console.log('[viewer] ext =', e);
   return e;
 });
 
@@ -92,7 +83,6 @@ const kind = computed(() => {
   else if (e === 'xls' || e === 'xlsx') k = 'excel';
   else if (e === 'pptx') k = 'pptx';
   else if (e === 'ppt') k = 'ppt';
-  console.log('[viewer] kind =', k);
   return k;
 });
 
@@ -110,23 +100,17 @@ const fileUrl = computed(() => {
   if (typeof window === 'undefined') return encoded;
 
   const full = window.location.origin + encoded;
-  console.log('[viewer] fileUrl =', full);
   return full;
 });
 
 /* ============================================================
  * 事件
  * ============================================================ */
-function onRendered() {
-  console.log('[viewer] ✅ 渲染完成');
-}
+function onRendered() {}
 
-function onError(err) {
-  console.error('[viewer] ❌ 渲染失败:', err);
-}
+function onError(err) {}
 
 function goBack() {
-  console.log('[viewer] goBack, history.length =', window.history.length);
   if (window.history.length > 1) {
     window.history.back();
   } else {
@@ -137,31 +121,6 @@ function goBack() {
 /* ============================================================
  * 生命周期
  * ============================================================ */
-onMounted(() => {
-  console.log('[viewer] ========== onMounted ==========');
-  console.log('[viewer] window.location.search =', window.location.search);
-  console.log('[viewer] fileSrc =', fileSrc.value);
-  console.log('[viewer] title =', title.value);
-  console.log('[viewer] ext =', ext.value);
-  console.log('[viewer] kind =', kind.value);
-  console.log('[viewer] fileUrl =', fileUrl.value);
-
-  if (fileUrl.value) {
-    fetch(fileUrl.value, { method: 'HEAD' })
-      .then((res) => {
-        console.log(
-          '[viewer] HEAD 请求结果:',
-          res.status,
-          res.statusText,
-          '| Content-Type:',
-          res.headers.get('content-type')
-        );
-      })
-      .catch((e) => console.error('[viewer] HEAD 请求失败:', e));
-  }
-});
-
-console.log('[viewer] ========== setup 结束 ==========');
 </script>
 
 <template>
