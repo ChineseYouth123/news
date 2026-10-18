@@ -3,11 +3,9 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vitepress';
 import { data as materialsData } from '../utils/materials.data';
 import { api as viewerApi } from 'v-viewer';
-import MarkdownIt from 'markdown-it';
 
 const { tree, totalFiles } = materialsData;
 const router = useRouter();
-const md = new MarkdownIt();
 
 /* ============================================================
  * 当前路径
@@ -42,7 +40,8 @@ function jumpTo(index) {
 /* ============================================================
  * 格式判断与点击逻辑
  * ============================================================ */
-const DOC_PAGE_EXTS = ['pdf', 'docx', 'xlsx', 'xls', 'pptx'];
+// 只有这些格式才允许跳转到预览页
+const DOC_PAGE_EXTS = ['pdf', 'docx', 'xlsx', 'xls', 'pptx', 'md'];
 const IMAGE_EXTS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'];
 
 const unsupportedDialog = ref({ visible: false, file: null });
@@ -57,7 +56,6 @@ function openFile(node) {
 
     viewerApi({
       options: {
-        // 使用显式的 size 配置，保留点击事件
         toolbar: {
           zoomIn: { show: true, size: 'large' },
           zoomOut: { show: true, size: 'large' },
@@ -71,7 +69,7 @@ function openFile(node) {
           flipHorizontal: false,
           flipVertical: false,
         },
-        navbar: true, // 导航图片栏
+        navbar: true,
         title: false,
         tooltip: true,
         movable: true,
@@ -84,7 +82,7 @@ function openFile(node) {
     return;
   }
 
-  // 2. 文档 → 预览页
+  // 2. 文档 → 跳预览页
   if (DOC_PAGE_EXTS.includes(node.ext)) {
     const src = encodeURIComponent(node.url);
     const title = encodeURIComponent(node.name);
@@ -93,13 +91,7 @@ function openFile(node) {
     return;
   }
 
-  // 3. MD → 站内路由
-  if (node.ext === 'md') {
-    router.go(node.url.replace(/\.md$/, ''));
-    return;
-  }
-
-  // 4. 其他格式
+  // 3. 其他格式（包括 html、txt 等） → 在当前页弹窗提醒，不跳转
   unsupportedDialog.value = { visible: true, file: node };
 }
 
@@ -123,7 +115,7 @@ function closeDialog() {
 /* ============================================================
  * 展示辅助
  * ============================================================ */
-const TYPE_LABEL = { pdf: 'PDF', epub: 'EPUB', md: 'MD', zip: 'ZIP', txt: 'TXT' };
+const TYPE_LABEL = { pdf: 'PDF', epub: 'EPUB', md: 'MD', zip: 'ZIP', txt: 'TXT', html: 'HTML' };
 
 function typeLabel(ext) {
   return TYPE_LABEL[ext] ?? ext.toUpperCase();
@@ -168,7 +160,6 @@ function formatSize(bytes) {
       <li v-for="node in currentList" :key="node.path">
         <!-- 目录 -->
         <div v-if="node.type === 'dir'" class="mb-item mb-item--dir" @click="enterDir(node)">
-          <!-- 暂停按钮 -->
           <Icon class="mb-icon--dir" name="wenjianjia" size="3.5rem" />
           <span class="mb-name">{{ node.name }}</span>
           <span class="mb-count">{{ node.count }} 项</span>
@@ -177,7 +168,6 @@ function formatSize(bytes) {
 
         <!-- 文件 -->
         <div v-else class="mb-item mb-item--file" @click="openFile(node)">
-          <!-- 缩略图：放大到 48x48 的圆角矩形 -->
           <img v-if="IMAGE_EXTS.includes(node.ext)" :src="node.url" class="mb-thumb" alt="" />
           <span v-else class="material-type-badge" :data-type="node.ext">
             {{ typeLabel(node.ext) }}
@@ -216,30 +206,28 @@ function formatSize(bytes) {
     </Transition>
   </Teleport>
 </template>
+
 <style scoped>
 @import '../styles/material.css';
 </style>
+
 <style scoped>
+/* 页面布局修复 */
 .VPContent > .VPDoc {
   padding: 32px 24px 0 !important;
 }
-/* ============================================================
- * 1. 容器重置：解决双重滚动条与遮挡问题
- * ============================================================ */
+
 .material-browser {
-  /* 核心：去掉固定高度，让页面自然撑开，由浏览器接管唯一滚动条 */
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
-  /* padding: 24px 24px 80px 24px; 底部留白，防止贴边 */
   box-sizing: border-box;
-
-  /* 关键：告诉浏览器如果不属于这个容器，不要在这里产生滚动条 */
   overflow: visible !important;
   height: auto !important;
   min-height: auto !important;
 }
 
+/* 头部 */
 .news-header h1 {
   font-size: 28px;
   margin: 0 0 8px;
@@ -255,9 +243,7 @@ function formatSize(bytes) {
   font-weight: 600;
 }
 
-/* ============================================================
- * 2. 面包屑
- * ============================================================ */
+/* 面包屑 */
 .mb-breadcrumb {
   display: flex;
   align-items: center;
@@ -292,9 +278,7 @@ function formatSize(bytes) {
   cursor: default;
 }
 
-/* ============================================================
- * 3. 列表容器：修复边框被切掉
- * ============================================================ */
+/* 列表 */
 .mb-list {
   list-style: none;
   padding: 10px;
@@ -302,17 +286,11 @@ function formatSize(bytes) {
   display: flex;
   flex-direction: column;
   gap: 6px;
-
-  /* 留出足够的空间给 hover 时的阴影和边框溢出 */
   margin-left: -4px;
   margin-right: -4px;
   padding-left: 4px;
   padding-right: 4px;
 }
-
-/* ============================================================
- * 4. 列表项：优化边框与悬浮效果
- * ============================================================ */
 .mb-item {
   display: flex;
   align-items: center;
@@ -320,26 +298,19 @@ function formatSize(bytes) {
   padding: 10px 16px;
   border-radius: 12px;
   cursor: pointer;
-
-  /* 核心：默认边框透明，防止改变布局大小 */
   border: 1px solid transparent;
   background-clip: padding-box;
-
   transition: all 0.2s ease;
   font-size: 14px;
 }
-
 .mb-item:hover {
   background: var(--vp-c-bg-soft);
-  /* 使用内阴影代替外边框，防止被容器遮挡 */
   border-color: var(--vp-c-brand-1);
   box-shadow: 0 0 0 1px var(--vp-c-brand-1) inset;
   transform: translateY(-1px);
 }
 
-/* ============================================================
- * 5. 目录与图标
- * ============================================================ */
+/* 目录与图标 */
 :deep(.mb-icon--dir) {
   color: var(--vp-c-brand-1) !important;
 }
@@ -352,9 +323,7 @@ function formatSize(bytes) {
   flex-shrink: 0;
 }
 
-/* ============================================================
- * 6. 文件类型标签
- * ============================================================ */
+/* 文件标签 */
 .material-type-badge {
   flex-shrink: 0;
   width: 48px;
@@ -373,10 +342,12 @@ function formatSize(bytes) {
   background: rgba(224, 82, 82, 0.12);
   color: #e05252;
 }
+.material-type-badge[data-type='html'] {
+  background: rgba(224, 144, 19, 0.12);
+  color: #e09013;
+}
 
-/* ============================================================
- * 7. 缩略图
- * ============================================================ */
+/* 缩略图 */
 .mb-thumb {
   width: 48px;
   height: 48px;
@@ -404,13 +375,11 @@ function formatSize(bytes) {
   color: var(--vp-c-text-1);
   font-weight: 500;
 }
-
 .mb-meta {
   font-size: 12px;
   color: var(--vp-c-text-3);
   flex-shrink: 0;
 }
-
 .mb-arrow {
   color: var(--vp-c-text-3);
   font-size: 18px;
@@ -424,7 +393,6 @@ function formatSize(bytes) {
 .mb-arrow--ext {
   font-size: 14px;
 }
-
 .news-empty {
   padding: 60px 20px;
   text-align: center;
@@ -432,7 +400,7 @@ function formatSize(bytes) {
 }
 
 /* ============================================================
- * 8. 不支持格式弹窗
+ * 补全缺失的弹窗样式
  * ============================================================ */
 .mb-dialog__mask {
   position: fixed;
@@ -454,5 +422,83 @@ function formatSize(bytes) {
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
   border: 1px solid var(--vp-c-divider);
 }
-/* (省略弹窗内部小样式，保持你原样即可) */
+
+.mb-dialog__title {
+  margin: 0 0 12px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.mb-dialog__desc {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+  line-height: 1.6;
+}
+
+.mb-dialog__file {
+  margin: 0 0 20px;
+  padding: 10px 14px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--vp-c-text-1);
+  word-break: break-all;
+}
+
+.mb-dialog__file-name {
+  font-weight: 500;
+}
+
+.mb-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.mb-dialog__btn {
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+  font-weight: 500;
+}
+
+.mb-dialog__btn--cancel {
+  background: transparent;
+  border-color: var(--vp-c-divider);
+  color: var(--vp-c-text-1);
+}
+.mb-dialog__btn--cancel:hover {
+  background: var(--vp-c-bg-soft);
+}
+
+.mb-dialog__btn--primary {
+  background: var(--vp-c-brand-1);
+  color: #fff;
+}
+.mb-dialog__btn--primary:hover {
+  background: var(--vp-c-brand-2);
+}
+
+/* 弹窗过渡动画 */
+.mb-dialog-fade-enter-active,
+.mb-dialog-fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.mb-dialog-fade-enter-active .mb-dialog,
+.mb-dialog-fade-leave-active .mb-dialog {
+  transition: transform 0.2s ease;
+}
+.mb-dialog-fade-enter-from,
+.mb-dialog-fade-leave-to {
+  opacity: 0;
+}
+.mb-dialog-fade-enter-from .mb-dialog,
+.mb-dialog-fade-leave-to .mb-dialog {
+  transform: scale(0.95);
+}
 </style>
