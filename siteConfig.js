@@ -6,7 +6,7 @@ export const siteMeta = {
   description: '全心全意为人民服务',
   tagline: '致力于红色文化的传承与交流，推动无产阶级事业不断前进',
   lang: 'zh-CN',
-  base: '/',
+  base: '/news/',
   logo: '/images/dongfanghong-red.png',
   copyright: 'Copyright (c) 2026',
   github: 'https://github.com/vuejs/vitepress',
