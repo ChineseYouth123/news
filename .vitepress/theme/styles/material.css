@@ -46,8 +46,10 @@
 /* ---------- 列表 ---------- */
 .mb-list {
   list-style: none;
-  padding: 0;
+  padding: 10px;
   margin: 0;
+  height: 480px;
+  overflow-y: scroll;
 }
 .vp-doc ul {
   list-style: none !important;

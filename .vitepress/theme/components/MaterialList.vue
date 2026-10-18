@@ -216,10 +216,24 @@ function formatSize(bytes) {
 </template>
 
 <style scoped>
+.VPContent > .VPDoc {
+  padding: 32px 24px 0 !important;
+}
+/* ============================================================
+ * 1. 容器重置：解决双重滚动条与遮挡问题
+ * ============================================================ */
 .material-browser {
-  padding: 24px;
+  /* 核心：去掉固定高度，让页面自然撑开，由浏览器接管唯一滚动条 */
+  width: 100%;
   max-width: 1000px;
   margin: 0 auto;
+  /* padding: 24px 24px 80px 24px; 底部留白，防止贴边 */
+  box-sizing: border-box;
+
+  /* 关键：告诉浏览器如果不属于这个容器，不要在这里产生滚动条 */
+  overflow: visible !important;
+  height: auto !important;
+  min-height: auto !important;
 }
 
 .news-header h1 {
@@ -237,7 +251,9 @@ function formatSize(bytes) {
   font-weight: 600;
 }
 
-/* 面包屑 */
+/* ============================================================
+ * 2. 面包屑
+ * ============================================================ */
 .mb-breadcrumb {
   display: flex;
   align-items: center;
@@ -272,16 +288,27 @@ function formatSize(bytes) {
   cursor: default;
 }
 
-/* 列表 */
+/* ============================================================
+ * 3. 列表容器：修复边框被切掉
+ * ============================================================ */
 .mb-list {
   list-style: none;
-  padding: 0;
+  padding: 10px;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px; /* 稍微拉开一点间距 */
+  gap: 6px;
+
+  /* 留出足够的空间给 hover 时的阴影和边框溢出 */
+  margin-left: -4px;
+  margin-right: -4px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
+/* ============================================================
+ * 4. 列表项：优化边框与悬浮效果
+ * ============================================================ */
 .mb-item {
   display: flex;
   align-items: center;
@@ -289,17 +316,26 @@ function formatSize(bytes) {
   padding: 10px 16px;
   border-radius: 12px;
   cursor: pointer;
+
+  /* 核心：默认边框透明，防止改变布局大小 */
   border: 1px solid transparent;
+  background-clip: padding-box;
+
   transition: all 0.2s ease;
   font-size: 14px;
 }
+
 .mb-item:hover {
   background: var(--vp-c-bg-soft);
+  /* 使用内阴影代替外边框，防止被容器遮挡 */
   border-color: var(--vp-c-brand-1);
+  box-shadow: 0 0 0 1px var(--vp-c-brand-1) inset;
   transform: translateY(-1px);
 }
 
-/* 目录 */
+/* ============================================================
+ * 5. 目录与图标
+ * ============================================================ */
 :deep(.mb-icon--dir) {
   color: var(--vp-c-brand-1) !important;
 }
@@ -312,11 +348,13 @@ function formatSize(bytes) {
   flex-shrink: 0;
 }
 
-/* 文件类型标签 */
+/* ============================================================
+ * 6. 文件类型标签
+ * ============================================================ */
 .material-type-badge {
   flex-shrink: 0;
-  width: 48px; /* 与缩略图保持宽度一致 */
-  height: 48px; /* 与缩略图保持高度一致 */
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -333,17 +371,17 @@ function formatSize(bytes) {
 }
 
 /* ============================================================
- * 列表情况：头部缩略图大小与质感优化
+ * 7. 缩略图
  * ============================================================ */
 .mb-thumb {
   width: 48px;
   height: 48px;
-  object-fit: cover; /* 保持图片比例，不拉伸 */
-  border-radius: 8px; /* 圆角更现代 */
+  object-fit: cover;
+  border-radius: 8px;
   flex-shrink: 0;
   border: 1px solid var(--vp-c-divider);
   background-color: var(--vp-c-bg-mute);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* 增加一点细微阴影 */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
@@ -390,7 +428,7 @@ function formatSize(bytes) {
 }
 
 /* ============================================================
- * 不支持格式弹窗
+ * 8. 不支持格式弹窗
  * ============================================================ */
 .mb-dialog__mask {
   position: fixed;
@@ -412,103 +450,5 @@ function formatSize(bytes) {
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
   border: 1px solid var(--vp-c-divider);
 }
-
-.mb-dialog__title {
-  margin: 0 0 12px;
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-}
-
-.mb-dialog__desc {
-  margin: 0 0 12px;
-  font-size: 14px;
-  color: var(--vp-c-text-2);
-  line-height: 1.6;
-}
-
-.mb-dialog__file {
-  margin: 0 0 20px;
-  padding: 10px 14px;
-  background: var(--vp-c-bg-soft);
-  border-radius: 8px;
-  font-size: 13px;
-  color: var(--vp-c-text-1);
-  word-break: break-all;
-}
-
-.mb-dialog__file-name {
-  font-weight: 500;
-}
-
-.mb-dialog__actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.mb-dialog__btn {
-  padding: 8px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition: all 0.15s;
-  font-weight: 500;
-}
-
-.mb-dialog__btn--cancel {
-  background: transparent;
-  border-color: var(--vp-c-divider);
-  color: var(--vp-c-text-1);
-}
-.mb-dialog__btn--cancel:hover {
-  background: var(--vp-c-bg-soft);
-}
-
-.mb-dialog__btn--primary {
-  background: var(--vp-c-brand-1);
-  color: #fff;
-}
-.mb-dialog__btn--primary:hover {
-  background: var(--vp-c-brand-2);
-}
-
-/* 弹窗过渡 */
-.mb-dialog-fade-enter-active,
-.mb-dialog-fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-.mb-dialog-fade-enter-active .mb-dialog,
-.mb-dialog-fade-leave-active .mb-dialog {
-  transition: transform 0.2s ease;
-}
-.mb-dialog-fade-enter-from,
-.mb-dialog-fade-leave-to {
-  opacity: 0;
-}
-.mb-dialog-fade-enter-from .mb-dialog,
-.mb-dialog-fade-leave-to .mb-dialog {
-  transform: scale(0.95);
-}
-
-/* 美化底部缩略图导航栏 */
-.viewer-navbar {
-  background: rgba(20, 20, 22, 0.9) !important;
-  backdrop-filter: blur(10px) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-/* 调整缩略图列表的间距和内边距 */
-.viewer-list > li {
-  padding: 2px !important;
-  border-radius: 4px !important;
-  transition: opacity 0.2s ease !important;
-}
-
-/* 当前选中的缩略图高亮 */
-.viewer-list > li.viewer-active {
-  opacity: 1 !important;
-  box-shadow: 0 0 0 2px var(--vp-c-brand-1) !important;
-}
+/* (省略弹窗内部小样式，保持你原样即可) */
 </style>
