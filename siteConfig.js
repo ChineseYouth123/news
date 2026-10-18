@@ -2,11 +2,12 @@
 
 /** 站点基础信息 —— 统一管理 */
 export const siteMeta = {
-  title: '笔记',
-  description: '发现和创造的文档11。',
+  title: '红色工人日报',
+  description: '全心全意为人民服务',
+  tagline: '致力于红色文化的传承与交流，推动无产阶级事业不断前进',
   lang: 'zh-CN',
   base: '/',
-  logo: '/images/logo.png',
+  logo: '/images/dongfanghong-red.png',
   copyright: 'Copyright (c) 2026',
   github: 'https://github.com/vuejs/vitepress',
 };

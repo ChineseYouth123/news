@@ -164,14 +164,24 @@ export default withPwa(
         ];
       }
     },
-
     transformPageData(pageData) {
-      // 判断是否是博客文章页，路径以 blog/ 开头且不是博客首页
-      const isBlogPost =
-        pageData.relativePath.startsWith('blog/') && pageData.relativePath !== 'blog/index.md';
-
-      if (isBlogPost) {
-        pageData.frontmatter.pageClass = 'blog-post';
+      // 判断如果是首页
+      if (pageData.relativePath === 'index.md') {
+        // 把 siteMeta 的数据强行注入到 frontmatter 的 hero 里
+        pageData.frontmatter.hero = {
+          name: siteMeta.title,
+          text: siteMeta.description,
+          tagline: siteMeta.tagline,
+          image: {
+            src: siteMeta.logo,
+            alt: 'Logo',
+          },
+          actions: [
+            { theme: 'brand', text: '开始阅读', link: '/pages/blog/' },
+            { theme: 'alt', text: '资料库', link: '/pages/materials/' },
+            { theme: 'alt', text: 'GitHub', link: 'https://github.com/vuejs/vitepress' },
+          ],
+        };
       }
     },
   })
