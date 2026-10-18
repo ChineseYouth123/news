@@ -1,5 +1,8 @@
 ---
 title: 资料
+footer: false
+sidebar: false
+aside: true
 ---
 
 <script setup>
