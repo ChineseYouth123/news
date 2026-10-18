@@ -1,12 +1,68 @@
+name: Deploy to GitHub Pages
+
+on:
+  # 当你推送到 main 分支时自动触发
+  push:
+    branches: [main]
+  # 允许你在 Actions 页面手动点击运行
+  workflow_dispatch:
+
+# 设置 GITHUB_TOKEN 的权限，允许部署到 Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 确保同一时间只有一个部署任务在运行
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # 拉取子模块，确保 src/blog 文档被一起打包
+          submodules: recursive
+          fetch-depth: 0
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
-      # ⚠️ 新增这一步：强制升级 npm 到 11 版本，避开 edgesOut 崩溃
+      # ⚠️ 修复 npm ci 报错的核心步骤：升级 npm 到 11 版本
       - name: Upgrade npm
         run: npm install -g npm@11
 
       - name: Install dependencies
+        # 优先使用 npm ci，失败则回退到 npm install
         run: npm ci || npm install
+
+      - name: Build with Vite (or your framework)
+        # 执行打包命令
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # 确保这里是你框架打包后的输出目录（Vite 默认是 dist）
+          path: './dist'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
