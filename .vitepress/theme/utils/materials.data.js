@@ -175,9 +175,6 @@ export default {
     // 扫描目录，得到文件树
     const tree = scan(SRC_DIR, URL_PREFIX);
 
-    // 调试用：打印树结构，排查扫描问题时打开
-    console.log('[materials.data] tree =', tree);
-
     // 递归统计文件总数
     const totalFiles = countFiles(tree);
 

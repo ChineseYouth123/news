@@ -113,7 +113,12 @@ export default withPwa(
         ],
       },
     },
-
+    ignoreDeadLinks: [
+      // 忽略以 /blog/资料/ 开头的链接
+      /^\/blog\/资料\//,
+      // 如果你有外部链接或者动态 HTML 链接，也可以放正则
+      /\.html$/,
+    ],
     vite: {
       resolve: {
         alias: {

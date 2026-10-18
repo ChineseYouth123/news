@@ -40,9 +40,12 @@ function jumpTo(index) {
 /* ============================================================
  * 格式判断与点击逻辑
  * ============================================================ */
-// 只有这些格式才允许跳转到预览页
+// 需要跳转内部预览页的格式
 const DOC_PAGE_EXTS = ['pdf', 'docx', 'xlsx', 'xls', 'pptx', 'md'];
+// 图片格式
 const IMAGE_EXTS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'];
+// 🔽 新增：直接在新标签页打开的格式（如 html）
+const NEW_TAB_EXTS = ['html', 'htm'];
 
 const unsupportedDialog = ref({ visible: false, file: null });
 
@@ -82,7 +85,13 @@ function openFile(node) {
     return;
   }
 
-  // 2. 文档 → 跳预览页
+  // 2. HTML 等 → 新标签页打开
+  if (NEW_TAB_EXTS.includes(node.ext)) {
+    window.open(node.url, '_blank', 'noopener');
+    return;
+  }
+
+  // 3. 文档 → 统一跳转内部预览页
   if (DOC_PAGE_EXTS.includes(node.ext)) {
     const src = encodeURIComponent(node.url);
     const title = encodeURIComponent(node.name);
@@ -91,7 +100,7 @@ function openFile(node) {
     return;
   }
 
-  // 3. 其他格式（包括 html、txt 等） → 在当前页弹窗提醒，不跳转
+  // 4. 其他格式 → 弹窗提示下载
   unsupportedDialog.value = { visible: true, file: node };
 }
 
