@@ -26,6 +26,7 @@
     "@vue-office/pdf": "^2.0.10",
     "@vue-office/pptx": "^1.0.1",
     "@vue/devtools-api": "^8.2.1",
+    "canvas-confetti": "^1.9.4",
     "colorthief": "^3.5.0",
     "fs-extra": "^11.4.1",
     "globby": "^16.2.4",
