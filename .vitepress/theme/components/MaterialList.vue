@@ -3,9 +3,11 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vitepress';
 import { data as materialsData } from '../utils/materials.data';
 import { api as viewerApi } from 'v-viewer';
+import MarkdownIt from 'markdown-it';
 
 const { tree, totalFiles } = materialsData;
 const router = useRouter();
+const md = new MarkdownIt();
 
 /* ============================================================
  * 当前路径
@@ -214,7 +216,9 @@ function formatSize(bytes) {
     </Transition>
   </Teleport>
 </template>
-
+<style scoped>
+@import '../styles/material.css';
+</style>
 <style scoped>
 .VPContent > .VPDoc {
   padding: 32px 24px 0 !important;

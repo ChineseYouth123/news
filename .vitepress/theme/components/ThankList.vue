@@ -101,3 +101,7 @@ function initial(name) {
     </section>
   </div>
 </template>
+
+<style scoped>
+@import '../styles/thanks.css';
+</style>

@@ -13,9 +13,6 @@ import Icon from './components/Icon.vue';
 
 import './styles/vars.css';
 import './styles/base.css';
-import './styles/news.css';
-import './styles/material.css';
-import './styles/thanks.css';
 
 export default {
   extends: DefaultTheme,
