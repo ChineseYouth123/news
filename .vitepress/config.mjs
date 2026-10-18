@@ -23,6 +23,12 @@ export default withPwa(
           href: `${siteMeta.base}feed.rss`,
           title: 'RSS Feed',
         },
+        'meta',
+        {
+          name: 'viewport',
+          // 解决pdfjs 在 Safari 可能会用页面级缩放覆盖掉 Viewer 内部的双指缩放，导致体验变差。
+          content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+        },
       ],
     ],
 

@@ -1,18 +1,13 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useRoute, useRouter, defineClientComponent } from 'vitepress';
+import PdfJsViewer from './PdfJsViewer.vue';
 
 console.log('[viewer] ========== 组件 setup 开始 ==========');
 
 /* ============================================================
  * 按需加载预览组件（只在客户端）
  * ============================================================ */
-const VueOfficePdf = defineClientComponent(async () => {
-  console.log('[viewer] 加载 @vue-office/pdf');
-  const mod = await import('@vue-office/pdf');
-  console.log('[viewer] @vue-office/pdf 就绪');
-  return mod.default;
-});
 
 const VueOfficeDocx = defineClientComponent(async () => {
   console.log('[viewer] 加载 @vue-office/docx');
@@ -205,12 +200,7 @@ console.log('[viewer] ========== setup 结束 ==========');
         <template v-if="fileUrl">
           <!-- PDF -->
           <div v-if="kind === 'pdf'" class="file-page__viewer">
-            <VueOfficePdf
-              :src="fileUrl"
-              style="height: 100%; width: 100%"
-              @rendered="onRendered"
-              @error="onError"
-            />
+            <PdfJsViewer :src="fileUrl" />
           </div>
 
           <!-- Word (.docx) -->
@@ -315,6 +305,11 @@ console.log('[viewer] ========== setup 结束 ==========');
   white-space: nowrap;
 }
 
+.file-page__viewer {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
 .file-page__download {
   flex-shrink: 0;
   font-size: 13px;
