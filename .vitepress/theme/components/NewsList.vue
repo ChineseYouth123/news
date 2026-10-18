@@ -1,10 +1,10 @@
 <script setup>
-import { computed, ref, watch, nextTick } from "vue";
-import { useRouter } from "vitepress"
-import { data as postsData } from "../utils/posts.data.js";
+import { computed, ref, watch, nextTick } from 'vue';
+import { useRouter } from 'vitepress';
+import { data as postsData } from '../utils/posts.data.js';
 
 const { total, groups, tags } = postsData;
-const router = useRouter()
+const router = useRouter();
 const PAGE_SIZE = 10;
 
 const activeTag = ref(null);
@@ -37,9 +37,7 @@ const flatItems = computed(() =>
 );
 
 /* ---------- 分页 ---------- */
-const totalPages = computed(() =>
-  Math.max(1, Math.ceil(flatItems.value.length / PAGE_SIZE))
-);
+const totalPages = computed(() => Math.max(1, Math.ceil(flatItems.value.length / PAGE_SIZE)));
 
 const pagedItems = computed(() => {
   const start = (currentPage.value - 1) * PAGE_SIZE;
@@ -69,11 +67,11 @@ const pageNumbers = computed(() => {
   if (tp <= 7) return Array.from({ length: tp }, (_, i) => i + 1);
 
   const out = [1];
-  if (cp > 3) out.push("...");
+  if (cp > 3) out.push('...');
   const start = Math.max(2, cp - 1);
   const end = Math.min(tp - 1, cp + 1);
   for (let i = start; i <= end; i++) out.push(i);
-  if (cp < tp - 2) out.push("...");
+  if (cp < tp - 2) out.push('...');
   out.push(tp);
   return out;
 });
@@ -84,18 +82,16 @@ function toggleTag(t) {
 }
 
 function goToPage(p) {
-  if (typeof p !== "number") return;
+  if (typeof p !== 'number') return;
   if (p < 1 || p > totalPages.value) return;
   currentPage.value = p;
-  nextTick(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+  nextTick(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
 
 function goHref(url) {
   // :href="item.url"
-  router.go(url)
+  router.go(url);
 }
-
-
 
 // 切标签 → 回到第 1 页
 watch(activeTag, () => {
@@ -119,9 +115,22 @@ watch(totalPages, (tp) => {
     </header>
 
     <div class="news-tag-filter">
-      <button class="news-filter-btn" :class="{ active: activeTag === null }" @click="activeTag = null">全部</button>
-      <button v-for="t in tags" :key="t" class="news-filter-btn" :class="{ active: activeTag === t }"
-        @click="toggleTag(t)">{{ t }}</button>
+      <button
+        class="news-filter-btn"
+        :class="{ active: activeTag === null }"
+        @click="activeTag = null"
+      >
+        全部
+      </button>
+      <button
+        v-for="t in tags"
+        :key="t"
+        class="news-filter-btn"
+        :class="{ active: activeTag === t }"
+        @click="toggleTag(t)"
+      >
+        {{ t }}
+      </button>
     </div>
 
     <section v-for="group in pagedGroups" :key="group.key" class="news-month-group">
@@ -139,32 +148,51 @@ watch(totalPages, (tp) => {
               </div>
               <!-- 标签 -->
               <div class="news-tags">
-                <span v-for="tag in item.tags" :key="tag" class="news-tag" :data-tag="tag">{{ tag }}</span>
+                <span v-for="tag in item.tags" :key="tag" class="news-tag" :data-tag="tag">{{
+                  tag
+                }}</span>
               </div>
             </div>
-
           </div>
         </li>
       </ul>
     </section>
 
-    <p v-if="filteredGroups.length === 0" class="news-empty">
-      没有匹配「{{ activeTag }}」的文章
-    </p>
+    <p v-if="filteredGroups.length === 0" class="news-empty">没有匹配「{{ activeTag }}」的文章</p>
 
     <footer v-if="totalPages > 1" class="news-pagination">
-      <button class="news-page-btn" :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">上一页</button>
+      <button
+        class="news-page-btn"
+        :disabled="currentPage === 1"
+        @click="goToPage(currentPage - 1)"
+      >
+        上一页
+      </button>
 
-      <button v-for="(p, i) in pageNumbers" :key="i" class="news-page-btn"
-        :class="{ active: p === currentPage, dots: p === '...' }" :disabled="p === '...'" @click="goToPage(p)">{{ p
-        }}</button>
+      <button
+        v-for="(p, i) in pageNumbers"
+        :key="i"
+        class="news-page-btn"
+        :class="{ active: p === currentPage, dots: p === '...' }"
+        :disabled="p === '...'"
+        @click="goToPage(p)"
+      >
+        {{ p }}
+      </button>
 
-      <button class="news-page-btn" :disabled="currentPage === totalPages"
-        @click="goToPage(currentPage + 1)">下一页</button>
+      <button
+        class="news-page-btn"
+        :disabled="currentPage === totalPages"
+        @click="goToPage(currentPage + 1)"
+      >
+        下一页
+      </button>
 
-      <span class="news-page-info">
-        第 {{ currentPage }} / {{ totalPages }} 页
-      </span>
+      <span class="news-page-info"> 第 {{ currentPage }} / {{ totalPages }} 页 </span>
     </footer>
   </div>
 </template>
+
+<style scoped>
+@import '../styles/news.css';
+</style>

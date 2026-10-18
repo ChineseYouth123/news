@@ -73,7 +73,9 @@ export default withPwa(
         copyright: `本中文文档采用 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 (CC BY-NC-SA 4.0) 进行许可。`,
       },
     },
-
+    markdown: {
+      toc: { level: [1, 2, 3, 4, 5, 6] }, // 必须包含 2 和 3
+    },
     pwa: {
       registerType: 'autoUpdate',
       injectRegister: 'auto',
