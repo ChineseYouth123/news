@@ -40,12 +40,11 @@ function jumpTo(index) {
 /* ============================================================
  * 格式判断与点击逻辑
  * ============================================================ */
-// 需要跳转内部预览页的格式
-const DOC_PAGE_EXTS = ['pdf', 'docx', 'xlsx', 'xls', 'pptx', 'md'];
-// 图片格式
+// 跳转内部预览页的格式（包含 md）
+const DOC_PAGE_EXTS = ['pdf', 'docx', 'xlsx', 'xls', 'pptx'];
 const IMAGE_EXTS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'];
-// 🔽 新增：直接在新标签页打开的格式（如 html）
-const NEW_TAB_EXTS = ['html', 'htm'];
+// 直接在新标签页打开的格式（只有 html 和 txt）
+const NEW_TAB_EXTS = ['html', 'htm', 'txt'];
 
 const unsupportedDialog = ref({ visible: false, file: null });
 
@@ -84,14 +83,19 @@ function openFile(node) {
     }).view(currentIndex >= 0 ? currentIndex : 0);
     return;
   }
+  // 3. MD → 站内路由
+  if (node.ext === 'md') {
+    router.go(node.url.replace(/\.md$/, ''));
+    return;
+  }
 
-  // 2. HTML 等 → 新标签页打开
+  // 3. HTML / TXT → 新标签页打开
   if (NEW_TAB_EXTS.includes(node.ext)) {
     window.open(node.url, '_blank', 'noopener');
     return;
   }
 
-  // 3. 文档 → 统一跳转内部预览页
+  // 2. 内部预览页（PDF, Word, Excel, PPTX）
   if (DOC_PAGE_EXTS.includes(node.ext)) {
     const src = encodeURIComponent(node.url);
     const title = encodeURIComponent(node.name);
@@ -355,6 +359,10 @@ function formatSize(bytes) {
   background: rgba(224, 144, 19, 0.12);
   color: #e09013;
 }
+.material-type-badge[data-type='md'] {
+  background: rgba(49, 130, 206, 0.12);
+  color: #3182ce;
+}
 
 /* 缩略图 */
 .mb-thumb {
@@ -409,7 +417,7 @@ function formatSize(bytes) {
 }
 
 /* ============================================================
- * 补全缺失的弹窗样式
+ * 弹窗样式
  * ============================================================ */
 .mb-dialog__mask {
   position: fixed;
