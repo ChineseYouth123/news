@@ -1,6 +1,7 @@
 <script setup>
 import { useData } from 'vitepress';
 import { computed } from 'vue';
+import FontSizeControl from './FontSizeControl.vue';
 
 const { page, frontmatter } = useData();
 
@@ -36,6 +37,8 @@ const displayDate = computed(() => formatDate(frontmatter.value.date));
         {{ Array.isArray(frontmatter.tags) ? frontmatter.tags.join(' · ') : frontmatter.tags }}
       </span>
     </div>
+    <!-- 字体大小控制 -->
+    <FontSizeControl />
   </div>
 </template>
 
