@@ -1,12 +1,12 @@
-这份 `README.md` 是你项目的“门面”，它不仅是给别人看的说明书，也是你自己回顾项目的备忘单。结合你现在的技术栈（`siteConfig.js` 配置抽离、PWA、多格式预览等），我为你重新梳理了一份**专业且完全契合你当前项目结构的 README 文档**。
-
-你可以直接复制以下内容，覆盖你根目录的 `README.md`：
-
----
-
 # 📝 Notes - 红色博客
 
 这是一个基于 **VitePress** 构建的现代化、全栈式个人数字花园。它不仅支持标准的 Markdown 文档写作，还内置了丰富的富文本预览、沉浸式音乐播放、PWA 离线缓存等高级特性。
+
+## 导航
+
+- **网站预览地址**：[https://chineseyouth123.github.io/news/](https://chineseyouth123.github.io/news/)
+
+- **文档资料仓库**：[https://github.com/ChineseYouth123/blog/](https://github.com/ChineseYouth123/blog/)
 
 ## ✨ 核心特性
 
@@ -18,6 +18,10 @@
   - 集成自动按日期/标签排序的文章列表系统。
   - 支持自定义首页布局（Hero、数据面板、响应式卡片导航）。
   - 字号“小/中/大”一键调节，记忆用户阅读偏好。
+- **📚 多格式资料库**：
+  - 基于 PDF.js 自研的 PDF 阅读器（支持大纲、缩放、下载）。
+  - 基于 `vue-office` 在线预览 Word、Excel、PPT。
+  - 图片画廊支持多图切换、缩放、旋转。
 - **📱 PWA 与离线支持**：
   - 配置了 `@vite-pwa/vitepress`，可安装到桌面，支持离线访问静态内容。
 - **🔍 全文搜索**：
@@ -87,7 +91,7 @@ export const siteMeta = {
   title: '笔记',
   description: '探索、创造与沉淀',
   logo: '/images/logo.png',
-  github: 'https://github.com/你的仓库',
+  github: 'https://github.com/aaa/doc', // 你的仓库地址
   // ...
 };
 ```
