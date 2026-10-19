@@ -1,32 +1,34 @@
 <!-- .vitepress/theme/components/HomeExtension.vue -->
 <script setup>
+import { useRouter, withBase } from 'vitepress';
+
 const links = [
   {
     title: '博客文章',
     desc: '记录抖音分享、记录与日常思考。',
     icon: '📝',
-    link: '/pages/blog/',
+    link: withBase('/pages/blog/'),
     color: 'var(--vp-c-brand-1)',
   },
   {
     title: '资料文件',
     desc: '支持 PDF、Word、Excel 和图片的在线预览。',
     icon: '📂',
-    link: '/pages/materials/',
+    link: withBase('/pages/materials/'),
     color: '#e05252',
   },
   {
     title: '音乐播放器',
     desc: '沉浸式全屏播放，红色专属歌单。',
     icon: '🎵',
-    link: '/pages/playlist',
+    link: withBase('/pages/playlist'),
     color: '#3182ce',
   },
   {
     title: '关于与感谢',
     desc: '了解这个站点背后的故事与技术支持。',
     icon: '💡',
-    link: '/pages/thanks/',
+    link: withBase('/pages/thanks/'),
     color: '#805ad5',
   },
 ];
