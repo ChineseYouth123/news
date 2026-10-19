@@ -182,70 +182,127 @@ onUnmounted(() => {
     </Transition>
   </Teleport>
 </template>
-
 <style>
-/* ========== 表格 & 卡片基础样式 ========== */
+/* ============================================================
+ * 1. 表格视图 (Table) - 现代极简风
+ * ============================================================ */
 .table-view-container {
   margin: 1.5rem 0;
   position: relative;
 }
+
 .table-wrapper {
   display: block;
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  /* 🔽 外层保留圆角和边框 */
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  background-color: var(--vp-c-bg);
 }
+
 .table-wrapper table {
   width: 100%;
   border-collapse: collapse;
+  /* 保证小屏下内容不挤压，触发横向滚动 */
   white-space: nowrap;
 }
+
+/* 🔽 单元格基础样式：隐藏内边框，只用底边框分隔行 */
 .table-wrapper th,
 .table-wrapper td {
-  padding: 10px 16px;
-  border: 1px solid var(--vp-c-divider);
+  padding: 12px 16px;
+  border: none;
+  border-bottom: 1px solid var(--vp-c-divider);
   text-align: left;
+  font-size: 14px;
+  color: var(--vp-c-text-1);
 }
+
+/* 🔽 标题列 (th) 样式 */
 .table-wrapper th {
   background-color: var(--vp-c-bg-soft);
   font-weight: 600;
+  color: var(--vp-c-text-2);
+  /* 缩小标题列宽：根据内容自适应，不再平分 */
+  width: 1%;
+  white-space: nowrap;
 }
+
+/* 最后一行的底部边框去掉，避免和外层边框重叠 */
+.table-wrapper tr:last-child td {
+  border-bottom: none;
+}
+
+/* 行 Hover 效果 */
+.table-wrapper tbody tr {
+  transition: background-color 0.2s;
+}
+.table-wrapper tbody tr:hover {
+  background-color: var(--vp-c-bg-soft);
+}
+
+/* ============================================================
+ * 2. 卡片视图 (Card) - 现代圆润风
+ * ============================================================ */
 .card-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
+
 .data-card {
+  /* 🔽 保留卡片外围边框和阴影 */
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: var(--vp-c-bg);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
+
+.data-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
 .card-item {
   display: flex;
-  padding: 10px 16px;
+  padding: 12px 16px;
+  /* 内部用极浅的边框分割上下 */
   border-bottom: 1px solid var(--vp-c-divider);
   font-size: 14px;
+  align-items: flex-start;
 }
+
 .card-item:last-child {
   border-bottom: none;
 }
-.card-item:nth-child(even) {
-  background-color: var(--vp-c-bg-soft);
-}
+
+/* 隔行变色已去除，改用更干净的背景色，如果需要可以保留下面这句 */
+/* .card-item:nth-child(even) { background-color: var(--vp-c-bg-soft); } */
+
 .card-label {
-  flex: 0 0 35%;
+  /* 🔽 标题列宽调窄 */
+  flex: 0 0 30%;
   font-weight: 600;
   color: var(--vp-c-text-2);
+  padding-right: 12px;
 }
+
 .card-value {
   flex: 1;
   color: var(--vp-c-text-1);
   word-break: break-all;
+  line-height: 1.6;
 }
 
-/* ========== 悬浮按钮样式 ========== */
+/* ============================================================
+ * 3. 悬浮按钮样式 (保留原有逻辑)
+ * ============================================================ */
 .global-table-toggle-btn {
   position: fixed;
   bottom: 135px;
