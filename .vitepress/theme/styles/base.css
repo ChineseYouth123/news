@@ -1,3 +1,7 @@
+.Layout {
+  overflow-x: hidden;
+}
+
 /* =========================================================
    通用基础 / 工具类
    ========================================================= */
@@ -119,44 +123,6 @@
   cursor: default;
   pointer-events: none;
   min-width: 20px;
-}
-
-/* Hero 区域入场动画 */
-.VPHero .container {
-  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) both;
-}
-
-.VPHero .main {
-  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) 0.1s both;
-}
-
-.VPHero .image {
-  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) 0.2s both;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 移动端减弱动画幅度，提升性能 */
-@media (max-width: 640px) {
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 }
 
 @media (max-width: 768px) {
