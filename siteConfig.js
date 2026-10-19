@@ -7,14 +7,15 @@ export const siteMeta = {
   tagline: '致力于红色文化的传承与交流，推动无产阶级事业不断前进',
   lang: 'zh-CN',
   base: '/news/',
-  logo: '/images/dongfanghong-red.png',
+  logo: '/images/dongfanghong-red.png', // 首页 图片
   copyright: 'Copyright (c) 2026',
   github: 'https://github.com/ChineseYouth123/news/',
 };
 
 /** RSS 配置-站点域名：开发用本地，构建用正式 */
 // 网址是本地部署地址，后续可以换为线上地址
-export const siteUrl = 'https://chineseyouth123.github.io/news/';
+// export const siteUrl = 'http://localhost:4173'; // 本地测试
+export const siteUrl = 'https://chineseyouth123.github.io/'; // 线上网址
 
 /** RSS 配置（复用上面的基础信息） */
 export const rssOptions = {
