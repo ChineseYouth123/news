@@ -102,9 +102,9 @@ onMounted(load);
             :class="{ 'is-playing': isPlayingThisPlaylist }"
             @click="onPlayAll"
           >
-            <span class="vp-pl__playall-icon">
-              {{ isPlayingThisPlaylist ? '⏸' : '▶' }}
-            </span>
+            <Icon v-if="isPlayingThisPlaylist" name="zanting" size="1rem" class="vp-fs__icon-sm" />
+            <Icon v-else name="play" size="1rem" class="vp-fs__icon-sm" />
+
             <span>{{ isPlayingThisPlaylist ? '暂停' : '播放全部' }}</span>
           </button>
         </div>

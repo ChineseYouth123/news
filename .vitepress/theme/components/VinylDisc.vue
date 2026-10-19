@@ -1,14 +1,22 @@
 <script setup>
-defineProps({
+import { computed } from 'vue';
+import { withBase } from 'vitepress';
+
+const props = defineProps({
   cover: { type: String, default: '' },
   spinning: { type: Boolean, default: false },
   size: { type: Number, default: 56 },
+});
+
+// 🔽 使用 computed 包裹，确保 cover 变化时自动更新，并加上 base 前缀
+const imgUrl = computed(() => {
+  return props.cover ? withBase(props.cover) : '';
 });
 </script>
 
 <template>
   <div class="vp-disc" :class="{ spinning }" :style="{ width: size + 'px', height: size + 'px' }">
-    <img v-if="cover" :src="cover" class="vp-disc__cover" />
+    <img v-if="imgUrl" :src="imgUrl" class="vp-disc__cover" />
     <div v-else class="vp-disc__placeholder">♪</div>
     <div class="vp-disc__center" />
   </div>

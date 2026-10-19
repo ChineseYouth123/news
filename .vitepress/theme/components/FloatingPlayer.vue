@@ -148,11 +148,16 @@ function onSeek(e) {
 
       <!-- 播放控制 -->
       <div class="vp-fp__ctrl">
-        <button @click="player.prev()" title="上一首">⏮</button>
-        <button @click="player.togglePlay()" :title="player.isPlaying ? '暂停' : '播放'">
-          {{ player.isPlaying ? '⏸' : '▶' }}
+        <button @click="player.prev()" title="上一首">
+          <Icon name="shangyiqu" size="1rem" class="vp-fs__icon-sm" />
         </button>
-        <button @click="player.next()" title="下一首">⏭</button>
+        <button @click="player.togglePlay()" :title="player.isPlaying ? '暂停' : '播放'">
+          <Icon v-if="player.isPlaying" name="zanting" size="1rem" class="vp-fs__icon-sm" />
+          <Icon v-else name="play" size="1rem" class="vp-fs__icon-sm" />
+        </button>
+        <button @click="player.next()" title="下一首">
+          <Icon name="xiayiqu" size="1rem" class="vp-fs__icon-sm" />
+        </button>
       </div>
     </div>
   </div>

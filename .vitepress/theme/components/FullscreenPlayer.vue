@@ -335,6 +335,7 @@ watch(
     -apple-system,
     sans-serif;
   color: #fff;
+  background-color: #fff;
   overflow: hidden;
   --player-accent: #3eaf7c;
 }
