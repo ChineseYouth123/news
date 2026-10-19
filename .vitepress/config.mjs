@@ -14,7 +14,7 @@ export default withPwa(
     lang: siteMeta.lang,
     title: siteMeta.title,
     description: siteMeta.description,
-    logo: siteMeta.logo,
+    logo: `${siteMeta.base.replace(/\/$/, '')}${siteMeta.logo}`,
     appearance: true, // （默认值）：显示切换按钮，默认跟随操作系统的颜色设置。
     cleanUrls: true, // 开启干净 URL（去掉 .html 后缀）
     head: [
@@ -51,7 +51,7 @@ export default withPwa(
     titleTemplate: 'Vite & Vue powered static site generator',
     srcDir: 'src/',
     layout: 'page',
-    navbar: false,
+    navbar: true,
     sidebar: true,
     aside: true,
     watch: ['path/to/files/**/*'],
@@ -179,26 +179,6 @@ export default withPwa(
             },
           ],
         ];
-      }
-    },
-    transformPageData(pageData) {
-      // 判断如果是首页
-      if (pageData.relativePath === 'index.md') {
-        // 把 siteMeta 的数据强行注入到 frontmatter 的 hero 里
-        pageData.frontmatter.hero = {
-          name: siteMeta.title,
-          text: siteMeta.description,
-          tagline: siteMeta.tagline,
-          image: {
-            src: siteMeta.logo,
-            alt: 'Logo',
-          },
-          actions: [
-            { theme: 'brand', text: '开始阅读', link: '/pages/blog/' },
-            { theme: 'alt', text: '资料库', link: '/pages/materials/' },
-            { theme: 'alt', text: 'GitHub', link: siteMeta.github },
-          ],
-        };
       }
     },
   })
