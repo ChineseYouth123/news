@@ -1,15 +1,16 @@
 <script setup>
-import { useRouter } from 'vitepress';
-const router=useRouter()
+import { useRouter, withBase } from 'vitepress';
+
+const router = useRouter();
 
 // 返回上一页
-const callBackFn=()=>{
- if (window.history.length > 1) {
-    window.history.back()
+const callBackFn = () => {
+  if (window.history.length > 1) {
+    window.history.back();
   } else {
-    router.go('/')
+    router.go(withBase('/'));
   }
-}
+};
 </script>
 
 <template>

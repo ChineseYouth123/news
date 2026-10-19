@@ -14,6 +14,7 @@ export default withPwa(
     title: siteMeta.title,
     description: siteMeta.description,
     logo: siteMeta.logo,
+    cleanUrls: true, // 开启干净 URL（去掉 .html 后缀）
     head: [
       [
         'link',

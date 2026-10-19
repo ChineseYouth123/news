@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, watch, nextTick } from 'vue';
-import { useRouter } from 'vitepress';
+import { useRouter, withBase } from 'vitepress';
 import { data as postsData } from '../utils/posts.data.js';
 
 const { total, groups, tags } = postsData;
@@ -90,7 +90,7 @@ function goToPage(p) {
 
 function goHref(url) {
   // :href="item.url"
-  router.go(url);
+  router.go(withBase(url));
 }
 
 // 切标签 → 回到第 1 页

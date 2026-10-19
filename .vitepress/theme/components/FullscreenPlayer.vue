@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref, watch, nextTick } from 'vue';
+import { useRoute, withBase } from 'vitepress';
 import { usePlayerStore } from '../stores/player';
 import { useUiStore } from '../stores/ui';
 import { seek } from '../audio/engine';
@@ -27,7 +28,7 @@ watch(
       const { default: ColorThief } = await import('colorthief');
       const img = new Image();
       img.crossOrigin = 'anonymous';
-      img.src = cover;
+      img.src = withBase(cover);
       img.onload = () => {
         try {
           const thief = new ColorThief();
@@ -46,7 +47,7 @@ watch(
 
 /* ============ 背景样式 ============ */
 const bgStyle = computed(() => ({
-  backgroundImage: track.value?.cover ? `url(${track.value.cover})` : 'none',
+  backgroundImage: withBase(track.value?.cover) ? `url(${withBase(track.value.cover)})` : 'none',
 }));
 
 /* ============ 歌词 ============ */
@@ -65,7 +66,8 @@ watch(
       if (t.lyric) {
         lyricLines.value = parseLRC(t.lyric);
       } else if (t.lrcUrl) {
-        const res = await fetch(t.lrcUrl);
+        const path = withBase(t.lrcUrl);
+        const res = await fetch(path);
         if (res.ok) {
           const text = await res.text();
           lyricLines.value = parseLRC(text);
@@ -248,7 +250,12 @@ watch(
               :class="{ clickable: view === 'cover' }"
               @click="view === 'cover' && toggleView()"
             >
-              <img v-if="track?.cover" :src="track.cover" class="vp-fs__cover" alt="cover" />
+              <img
+                v-if="track?.cover"
+                :src="withBase(track.cover)"
+                class="vp-fs__cover"
+                alt="cover"
+              />
               <div v-else class="vp-fs__cover vp-fs__cover--placeholder">♪</div>
             </div>
 
@@ -292,7 +299,7 @@ watch(
             </div>
             <div class="primary" @click="player.togglePlay()">
               <!-- 播放按钮 -->
-              <Icon v-if="!player.isPlaying" name="play" size="3rem" />
+              <Icon v-if="!player.isPlaying" name="play" size="2rem" />
               <!-- 暂停按钮 -->
               <Icon v-else name="zanting" size="2rem" />
             </div>
@@ -620,6 +627,7 @@ watch(
   justify-content: center;
   align-items: center;
   gap: 40px;
+  height: 50px;
 }
 
 .vp-fs__ctrl button {

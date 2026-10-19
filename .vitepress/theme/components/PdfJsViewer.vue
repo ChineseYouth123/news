@@ -6,6 +6,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { withBase } from 'vitepress';
 
 const props = defineProps({
   src: { type: String, required: true },
@@ -13,10 +14,13 @@ const props = defineProps({
 
 const viewerUrl = computed(() => {
   // 指向你 public 下的 viewer.html
-  const base = '/pdfjs/web/viewer.html';
+  const base = withBase('/pdfjs/web/viewer.html');
+
   // file 参数必须用 encodeURIComponent 编码
   const file = encodeURIComponent(props.src);
+
   // 可选：直接定位到目录侧边栏（pagemode=bookmarks）
-  return `${base}?file=${file}#pagemode=bookmarks`;
+  const path = `${base}?file=${file}#pagemode=bookmarks`;
+  return path;
 });
 </script>

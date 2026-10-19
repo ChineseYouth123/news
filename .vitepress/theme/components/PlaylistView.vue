@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue';
-import { useRoute } from 'vitepress';
+import { useRoute, withBase } from 'vitepress';
 import { usePlayerStore } from '../stores/player';
 import { setProvider } from '../providers';
 import { fmtTime } from '../utils/format';
@@ -92,7 +92,7 @@ onMounted(load);
 
     <template v-else-if="playlist">
       <div class="vp-pl__header">
-        <img v-if="playlist.cover" :src="playlist.cover" class="vp-pl__cover" />
+        <img v-if="playlist.cover" :src="withBase(playlist.cover)" class="vp-pl__cover" />
         <div class="vp-pl__header-info">
           <h1>{{ playlist.name }}</h1>
           <p v-if="playlist.creator">by {{ playlist.creator }}</p>

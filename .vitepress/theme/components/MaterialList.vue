@@ -1,15 +1,12 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { useRouter } from 'vitepress';
+import { useRouter, withBase } from 'vitepress';
 import { data as materialsData } from '../utils/materials.data';
 import { api as viewerApi } from 'v-viewer';
 
 const { tree, totalFiles } = materialsData;
 const router = useRouter();
 
-/* ============================================================
- * 当前路径
- * ============================================================ */
 const stack = ref([]);
 
 const currentList = computed(() => {
@@ -23,9 +20,6 @@ const breadcrumbs = computed(() => [
   ...stack.value.map((s) => ({ name: s.name, path: s.path })),
 ]);
 
-/* ============================================================
- * 交互
- * ============================================================ */
 function enterDir(node) {
   stack.value.push({ name: node.name, path: node.path, node });
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -53,8 +47,10 @@ function openFile(node) {
   if (IMAGE_EXTS.includes(node.ext)) {
     const imageUrls = currentList.value
       .filter((n) => n.type === 'file' && IMAGE_EXTS.includes(n.ext))
-      .map((n) => n.url);
-    const currentIndex = imageUrls.indexOf(node.url);
+      .map((n) => withBase(n.url));
+    const currentIndex = currentList.value
+      .filter((n) => n.type === 'file' && IMAGE_EXTS.includes(n.ext))
+      .findIndex((n) => n.url === node.url);
 
     viewerApi({
       options: {
@@ -85,21 +81,26 @@ function openFile(node) {
   }
   // 3. MD → 站内路由
   if (node.ext === 'md') {
-    router.go(node.url.replace(/\.md$/, ''));
+    const path = withBase(node.url.replace(/\.md$/, ''));
+    router.go(path);
     return;
   }
 
   // 3. HTML / TXT → 新标签页打开
   if (NEW_TAB_EXTS.includes(node.ext)) {
-    window.open(node.url, '_blank', 'noopener');
+    const path = withBase(node.url, '_blank', 'noopener');
+    window.open(path);
     return;
   }
 
   // 2. 内部预览页（PDF, Word, Excel, PPTX）
   if (DOC_PAGE_EXTS.includes(node.ext)) {
-    const src = encodeURIComponent(node.url);
+    const nodeUrl = withBase(node.url);
+
+    const src = encodeURIComponent(nodeUrl);
+
     const title = encodeURIComponent(node.name);
-    const url = `/pages/materials/viewer?src=${src}&title=${title}`;
+    const url = withBase(`/pages/materials/viewer?src=${src}&title=${title}`);
     router.go(url);
     return;
   }
@@ -112,7 +113,7 @@ function confirmDownload() {
   const file = unsupportedDialog.value.file;
   if (file) {
     const a = document.createElement('a');
-    a.href = file.url;
+    a.href = withBase(file.url);
     a.download = file.name;
     document.body.appendChild(a);
     a.click();
@@ -125,20 +126,15 @@ function closeDialog() {
   unsupportedDialog.value = { visible: false, file: null };
 }
 
-/* ============================================================
- * 展示辅助
- * ============================================================ */
 const TYPE_LABEL = { pdf: 'PDF', epub: 'EPUB', md: 'MD', zip: 'ZIP', txt: 'TXT', html: 'HTML' };
-
 function typeLabel(ext) {
   return TYPE_LABEL[ext] ?? ext.toUpperCase();
 }
-
 function formatSize(bytes) {
   if (!bytes) return '';
   const units = ['B', 'KB', 'MB', 'GB'];
-  let i = 0;
-  let n = bytes;
+  let i = 0,
+    n = bytes;
   while (n >= 1024 && i < units.length - 1) {
     n /= 1024;
     i++;
@@ -171,7 +167,6 @@ function formatSize(bytes) {
 
     <ul v-if="currentList.length" class="mb-list">
       <li v-for="node in currentList" :key="node.path">
-        <!-- 目录 -->
         <div v-if="node.type === 'dir'" class="mb-item mb-item--dir" @click="enterDir(node)">
           <Icon class="mb-icon--dir" name="wenjianjia" size="3.5rem" />
           <span class="mb-name">{{ node.name }}</span>
@@ -179,26 +174,27 @@ function formatSize(bytes) {
           <span class="mb-arrow">›</span>
         </div>
 
-        <!-- 文件 -->
         <div v-else class="mb-item mb-item--file" @click="openFile(node)">
-          <img v-if="IMAGE_EXTS.includes(node.ext)" :src="node.url" class="mb-thumb" alt="" />
-          <span v-else class="material-type-badge" :data-type="node.ext">
-            {{ typeLabel(node.ext) }}
-          </span>
-
+          <img
+            v-if="IMAGE_EXTS.includes(node.ext)"
+            :src="withBase(node.url)"
+            class="mb-thumb"
+            alt=""
+          />
+          <span v-else class="material-type-badge" :data-type="node.ext">{{
+            typeLabel(node.ext)
+          }}</span>
           <span class="mb-name">{{ node.name }}</span>
-          <span class="mb-meta">
-            <span v-if="node.size">{{ formatSize(node.size) }}</span>
-          </span>
+          <span class="mb-meta"
+            ><span v-if="node.size">{{ formatSize(node.size) }}</span></span
+          >
           <span class="mb-arrow mb-arrow--ext">↗</span>
         </div>
       </li>
     </ul>
-
     <p v-else class="news-empty">此目录为空</p>
   </div>
 
-  <!-- 不支持格式的弹窗 -->
   <Teleport to="body">
     <Transition name="mb-dialog-fade">
       <div v-if="unsupportedDialog.visible" class="mb-dialog__mask" @click.self="closeDialog">
@@ -223,7 +219,6 @@ function formatSize(bytes) {
 <style scoped>
 @import '../styles/material.css';
 </style>
-
 <style scoped>
 /* 页面布局修复 */
 .VPContent > .VPDoc {
