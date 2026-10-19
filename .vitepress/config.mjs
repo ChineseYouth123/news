@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress';
+
 import path from 'path';
 import fs from 'fs';
 import { withPwa } from '@vite-pwa/vitepress';
@@ -14,8 +15,10 @@ export default withPwa(
     title: siteMeta.title,
     description: siteMeta.description,
     logo: siteMeta.logo,
+    appearance: true, // （默认值）：显示切换按钮，默认跟随操作系统的颜色设置。
     cleanUrls: true, // 开启干净 URL（去掉 .html 后缀）
     head: [
+      // 1. RSS 订阅
       [
         'link',
         {
@@ -24,11 +27,23 @@ export default withPwa(
           href: `${siteMeta.base}feed.rss`,
           title: 'RSS Feed',
         },
+      ],
+      // 2. 移动端视口
+      [
         'meta',
         {
           name: 'viewport',
-          // 解决pdfjs 在 Safari 可能会用页面级缩放覆盖掉 Viewer 内部的双指缩放，导致体验变差。
           content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+        },
+      ],
+      // 3. 网站图标 (🔽 关键修复：拼上 base 前缀)
+      [
+        'link',
+        {
+          rel: 'icon',
+          type: 'image/png',
+          // 如果 siteMeta.base 是 '/news/'，这里会变成 '/news/images/logo.png'
+          href: `${siteMeta.base.replace(/\/$/, '')}/favicon.ico`,
         },
       ],
     ],
@@ -38,7 +53,7 @@ export default withPwa(
     layout: 'page',
     navbar: false,
     sidebar: true,
-    aside: false,
+    aside: true,
     watch: ['path/to/files/**/*'],
 
     themeConfig: {
@@ -48,13 +63,14 @@ export default withPwa(
         { text: '资料', link: '/pages/materials/' },
         {
           text: '更多',
-          items: [{ text: '音乐', link: '/pages/playlist' }],
+          items: [{ text: '音乐列表', link: '/pages/playlist' }],
         },
         {
           text: '关于',
           activeMatch: `^/about/`,
           items: [
-            { text: '反馈与建议', link: '/pages/about/faq' },
+            { text: '反馈与建议', link: siteMeta.jianyi },
+            { text: '投稿信箱', link: siteMeta.xinxiang },
             { text: '感谢', link: '/pages/thanks/' },
           ],
         },
@@ -180,7 +196,7 @@ export default withPwa(
           actions: [
             { theme: 'brand', text: '开始阅读', link: '/pages/blog/' },
             { theme: 'alt', text: '资料库', link: '/pages/materials/' },
-            { theme: 'alt', text: 'GitHub', link: 'https://github.com/vuejs/vitepress' },
+            { theme: 'alt', text: 'GitHub', link: siteMeta.github },
           ],
         };
       }

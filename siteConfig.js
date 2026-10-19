@@ -10,6 +10,10 @@ export const siteMeta = {
   logo: '/images/dongfanghong-red.png', // 首页 图片
   copyright: 'Copyright (c) 2026',
   github: 'https://github.com/ChineseYouth123/news/',
+  // 建议
+  jianyi: 'https://flat-gargoyle-89e.notion.site/3feeedabc59c808d9e35eea39f96f499?pvs=105',
+  // 投稿
+  xinxiang: 'https://flat-gargoyle-89e.notion.site/3feeedabc59c80d786b5d84a60bacc99?pvs=143',
 };
 
 /** RSS 配置-站点域名：开发用本地，构建用正式 */
