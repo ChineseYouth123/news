@@ -8,63 +8,69 @@ function toDate(v) {
 }
 
 // ============ 创建 Data Loader ============
-export default createContentLoader('blog/博客/**/*.md', {
-  excerpt: false,
+export default createContentLoader(
+  // 扫描 blog/博客 下所有 md，但排除 模板 目录
+  ['blog/博客/**/*.md', '!blog/博客/模板/**'],
+  {
+    excerpt: false,
 
-  transform(raw) {
-    if (!raw || raw.length === 0) {
-      return { total: 0, posts: [], groups: [], tags: [] };
-    }
-
-    // ---------- 1. 归一化 ----------
-    const posts = raw
-      .map((p) => {
-        const fm = p.frontmatter || {};
-        const d = toDate(fm.date);
-        return {
-          url: p.url,
-          title: String(fm.title ?? '未命名文章'),
-          date: d.getTime(),
-          dateStr: d.toISOString().slice(0, 10),
-          tags: Array.isArray(fm.tags) ? fm.tags : [],
-          categories: Array.isArray(fm.categories) ? fm.categories : [],
-          description: String(fm.description ?? ''),
-          top: Boolean(fm.top),
-          cover: String(fm.cover ?? ''),
-        };
-      })
-      // ---------- 2. 排序：置顶优先，其次日期倒序 ----------
-      .sort((a, b) => {
-        if (a.top !== b.top) return a.top ? -1 : 1;
-        return b.date - a.date;
-      });
-
-    // ---------- 3. 按年月分组 ----------
-    const map = new Map();
-    for (const p of posts) {
-      const d = new Date(p.date);
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, '0');
-      const key = `${y}-${m}`;
-      if (!map.has(key)) {
-        map.set(key, {
-          key,
-          label: `${y} 年 ${m} 月`,
-          items: [],
-        });
+    transform(raw) {
+      if (!raw || raw.length === 0) {
+        return { total: 0, posts: [], groups: [], tags: [] };
       }
-      map.get(key).items.push(p);
-    }
 
-    // ---------- 4. 所有标签去重并排序 ----------
-    const tagSet = new Set();
-    for (const p of posts) for (const t of p.tags) tagSet.add(t);
+      // ---------- 1. 归一化 ----------
+      const posts = raw
+        // 兜底：即使扫描阶段漏网，也过滤掉模板文件
+        .filter((p) => !p.url.includes('/模板/'))
+        .map((p) => {
+          const fm = p.frontmatter || {};
+          const d = toDate(fm.date);
+          return {
+            url: p.url,
+            title: String(fm.title ?? '未命名文章'),
+            date: d.getTime(),
+            dateStr: d.toISOString().slice(0, 10),
+            tags: Array.isArray(fm.tags) ? fm.tags : [],
+            categories: Array.isArray(fm.categories) ? fm.categories : [],
+            description: String(fm.description ?? ''),
+            top: Boolean(fm.top),
+            cover: String(fm.cover ?? ''),
+          };
+        })
+        // ---------- 2. 排序：置顶优先，其次日期倒序 ----------
+        .sort((a, b) => {
+          if (a.top !== b.top) return a.top ? -1 : 1;
+          return b.date - a.date;
+        });
 
-    return {
-      total: posts.length,
-      posts,
-      groups: [...map.values()],
-      tags: [...tagSet].sort(),
-    };
-  },
-});
+      // ---------- 3. 按年月分组 ----------
+      const map = new Map();
+      for (const p of posts) {
+        const d = new Date(p.date);
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const key = `${y}-${m}`;
+        if (!map.has(key)) {
+          map.set(key, {
+            key,
+            label: `${y} 年 ${m} 月`,
+            items: [],
+          });
+        }
+        map.get(key).items.push(p);
+      }
+
+      // ---------- 4. 所有标签去重并排序 ----------
+      const tagSet = new Set();
+      for (const p of posts) for (const t of p.tags) tagSet.add(t);
+
+      return {
+        total: posts.length,
+        posts,
+        groups: [...map.values()],
+        tags: [...tagSet].sort(),
+      };
+    },
+  }
+);
