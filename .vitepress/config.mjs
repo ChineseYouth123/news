@@ -142,6 +142,7 @@ export default withPwa(
           '@': path.resolve(__dirname, '/src'),
         },
       },
+      srcExclude: ['blog/博客/模板/**'],
       plugins: [
         pagefindPlugin({
           customSearchQuery: chineseSearchOptimize,
