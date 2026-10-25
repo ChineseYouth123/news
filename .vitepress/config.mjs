@@ -136,13 +136,13 @@ export default withPwa(
       // 如果你有外部链接或者动态 HTML 链接，也可以放正则
       /\.html$/,
     ],
+    srcExclude: ['blog/博客/模板/**'],
     vite: {
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '/src'),
         },
       },
-      srcExclude: ['blog/博客/模板/**'],
       plugins: [
         pagefindPlugin({
           customSearchQuery: chineseSearchOptimize,
