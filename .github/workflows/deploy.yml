@@ -28,22 +28,21 @@ jobs:
         with:
           # 递归拉取子模块，确保 src/blog 有内容
           submodules: recursive
-          # 拉取完整历史，便于子模块定位到正确的 commit
+          # 拉取完整历史，便于子模块定位和 --remote 更新
           fetch-depth: 0
           # 如果子模块是私有仓库，取消下面这行的注释并配置 PAT
           # token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Update Submodules
-        # 注意：这里用 update 而不是 update --remote
-        # --remote 会把子模块强制同步到远端最新提交，可能把已删除的坏文件重新拉回来
-        # 使用普通 update，让子模块停在工作流指定的 commit 上，行为更可控
+      - name: Update Submodules to latest
+        # 关键：--remote 让子模块去它跟踪的远端分支拉最新提交
+        # 而不是停留在父仓库记录的固定 SHA，这样你在子模块远端删掉的文件
+        # （比如模板文件）CI 也能拿到
         run: |
-          git submodule update --init --recursive
+          git submodule update --remote --recursive
 
       - name: Exclude template files from build
         # 兜底：即使子模块里还有含 Templater 语法的模板文件，
         # 也在构建前把它们移出 blog 扫描范围，避免 YAML 解析报错
-        # -type d -name "模板" 匹配任意层级的模板目录
         run: |
           find src/blog -type d -name "模板" -prune -exec rm -rf {} + 2>/dev/null || true
 
