@@ -1,3 +1,5 @@
+
 [submodule "src/blog"]
-	path = src/blog
-	url = https://github.com/ChineseYouth123/blog.git
+    path = src/blog
+    url = https://github.com/ChineseYouth123/blog.git
+    branch = main
