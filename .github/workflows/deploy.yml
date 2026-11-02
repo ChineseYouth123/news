@@ -6,8 +6,10 @@ on:
   workflow_dispatch:
   # 每天 UTC 0 点（北京时间早上 8 点）自动构建一次，检查子模块是否有新内容
   schedule:
-    - cron: '0 0 * * *'
-
+    - cron: '0 0 * * *'  
+  # 新增：监听来自子仓库的 repository_dispatch 事件
+  repository_dispatch:
+    types: [submodule-updated]
 # GitHub Pages 部署所需权限
 permissions:
   contents: read
