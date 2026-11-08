@@ -1,85 +1,39 @@
-name: Deploy to GitHub Pages
+name: CI
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
-  # 每天 UTC 0 点（北京时间早上 8 点）兜底构建一次
-  schedule:
-    - cron: '0 0 * * *'
-  # 子仓库 push 后通过 API 触发
-  repository_dispatch:
-    types: [submodule-updated]
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: 'pages'
-  cancel-in-progress: true
+    branches:
+      - main
+  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 0
-          # 如果子模块是私有仓库，取消注释并配置 PAT
-          # token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Update Submodules to latest
-        run: |
-          git submodule update --remote --recursive
-
-      - name: Exclude template files from build
-        run: |
-          find src/blog -type d -name "模板" -prune -exec rm -rf {} + 2>/dev/null || true
-
-      # 1) 先安装 pnpm（必须在 setup-node 之前，才能让 cache: 'pnpm' 生效）
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
-          # 如果 package.json 里有 packageManager 字段，可省略 version
+          version: 10
+          # 如果 package.json 中已经配置了 packageManager 字段，
+          # 请删除上面的 version，避免 pnpm 版本冲突
 
-      # 2) Node 缓存改为 pnpm
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: pnpm
+          # 锁文件在仓库根目录时，这一行可以省略
+          # cache-dependency-path: pnpm-lock.yaml
 
-      # 3) 安装依赖：优先 frozen-lockfile 保证可复现，失败则回退普通安装
       - name: Install dependencies
-        run: |
-          pnpm install --frozen-lockfile || pnpm install
+        run: pnpm install --frozen-lockfile
 
-      - name: Clean VitePress cache
-        run: rm -rf .vitepress/cache .vitepress/dist
+      - name: Build
+        run: pnpm build
 
-      - name: Build with Vite
-        run: pnpm run build
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './.vitepress/dist'
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Test
+        run: pnpm test
