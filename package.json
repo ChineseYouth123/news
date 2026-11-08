@@ -41,5 +41,17 @@
     "viewerjs": "^1.15.2",
     "vitepress-plugin-pagefind": "^0.4.25",
     "vue-demi": "^0.14.6"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "@vue-office/docx",
+      "@vue-office/excel",
+      "@vue-office/pdf",
+      "@vue-office/pptx",
+      "esbuild",
+      "sharp",
+      "vue-demi"
+    ]
   }
 }
