@@ -4,19 +4,18 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # 每天 UTC 0 点（北京时间早上 8 点）自动构建一次，检查子模块是否有新内容
+  # 每天 UTC 0 点（北京时间早上 8 点）兜底构建一次
   schedule:
-    - cron: '0 0 * * *'  
-  # 新增：监听来自子仓库的 repository_dispatch 事件
+    - cron: '0 0 * * *'
+  # 子仓库 push 后通过 API 触发
   repository_dispatch:
     types: [submodule-updated]
-# GitHub Pages 部署所需权限
+
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 同一时间只保留一个部署任务，新的 push 会取消进行中的旧任务
 concurrency:
   group: 'pages'
   cancel-in-progress: true
@@ -28,45 +27,43 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          # 递归拉取子模块，确保 src/blog 有内容
           submodules: recursive
-          # 拉取完整历史，便于子模块定位和 --remote 更新
           fetch-depth: 0
-          # 如果子模块是私有仓库，取消下面这行的注释并配置 PAT
+          # 如果子模块是私有仓库，取消注释并配置 PAT
           # token: ${{ secrets.PAT_TOKEN }}
 
       - name: Update Submodules to latest
-        # 关键：--remote 让子模块去它跟踪的远端分支拉最新提交
-        # 而不是停留在父仓库记录的固定 SHA，这样你在子模块远端删掉的文件
-        # （比如模板文件）CI 也能拿到
         run: |
           git submodule update --remote --recursive
 
       - name: Exclude template files from build
-        # 兜底：即使子模块里还有含 Templater 语法的模板文件，
-        # 也在构建前把它们移出 blog 扫描范围，避免 YAML 解析报错
         run: |
           find src/blog -type d -name "模板" -prune -exec rm -rf {} + 2>/dev/null || true
 
+      # 1) 先安装 pnpm（必须在 setup-node 之前，才能让 cache: 'pnpm' 生效）
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          # 如果 package.json 里有 packageManager 字段，可省略 version
+
+      # 2) Node 缓存改为 pnpm
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: 'pnpm'
 
-      - name: Upgrade npm
-        run: npm install -g npm@11
-
+      # 3) 安装依赖：优先 frozen-lockfile 保证可复现，失败则回退普通安装
       - name: Install dependencies
-        # 优先用 npm ci 保证可复现；lock 文件不一致时回退到 npm install
-        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+        run: |
+          pnpm install --frozen-lockfile || pnpm install
 
       - name: Clean VitePress cache
-        # 清理旧缓存和产物，避免 createContentLoader 复用已删除文件的解析结果
         run: rm -rf .vitepress/cache .vitepress/dist
 
       - name: Build with Vite
-        run: npm run build
+        run: pnpm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -74,7 +71,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # VitePress 默认输出目录
           path: './.vitepress/dist'
 
   deploy:
