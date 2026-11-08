@@ -17,7 +17,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: 12
           # 如果 package.json 中已经配置了 packageManager 字段，
           # 请删除上面的 version，避免 pnpm 版本冲突
 
