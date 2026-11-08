@@ -1,8 +1,8 @@
 // .vitepress/theme/index.ts
 import DefaultTheme from 'vitepress/theme';
 import { createPinia } from 'pinia';
-import VueViewer from 'v-viewer'; // 引入 v-viewer
-import 'viewerjs/dist/viewer.css'; // 必须引入样式
+import { initComponent } from 'vitepress-plugin-legend/component';
+import 'vitepress-plugin-legend/dist/index.css';
 import '../theme/styles/custom.css';
 
 import NewsList from './components/NewsList.vue';
@@ -17,13 +17,21 @@ import './styles/base.css';
 export default {
   extends: DefaultTheme,
   Layout: MyLayout,
-  enhanceApp({ app }) {
+  async enhanceApp({ app }) {
+    // 1. 正常注册 Pinia 和全局组件
     app.use(createPinia());
     app.component('NewsList', NewsList);
     app.component('MaterialList', MaterialList);
     app.component('ThankList', ThankList);
     app.component('Icon', Icon);
-    app.use(VueViewer); // 注册 v-viewer（全局指令、组件、API 都可用）
-    app.component('NewsList', NewsList);
+
+    // 2. 初始化 legend 插件（Markmap/Mermaid 等）
+    initComponent(app);
+
+    // 3. 只在浏览器端动态加载并注册 v-viewer
+    if (!import.meta.env.SSR) {
+      const VueViewer = (await import('v-viewer')).default;
+      app.use(VueViewer);
+    }
   },
 };

@@ -39,6 +39,7 @@
     "sass-embedded": "^1.105.1",
     "v-viewer": "^3.0.23",
     "viewerjs": "^1.15.2",
+    "vitepress-plugin-legend": "^2.0.0",
     "vitepress-plugin-pagefind": "^0.4.25",
     "vue-demi": "^0.14.6"
   },

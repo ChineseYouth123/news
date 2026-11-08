@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { withPwa } from '@vite-pwa/vitepress';
 import { RssPlugin } from 'vitepress-plugin-rss';
+import { vitepressPluginLegend } from 'vitepress-plugin-legend';
 import { siteMeta, rssOptions } from '../siteConfig.js';
 import { chineseSearchOptimize, pagefindPlugin } from 'vitepress-plugin-pagefind';
 
@@ -92,6 +93,9 @@ export default withPwa(
     },
     markdown: {
       toc: { level: [1, 2, 3, 4, 5, 6] }, // 必须包含 2 和 3
+      config(md) {
+        vitepressPluginLegend(md);
+      },
     },
     pwa: {
       registerType: 'autoUpdate',
